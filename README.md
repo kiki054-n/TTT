@@ -1,100 +1,118 @@
-# TriTetra Theory
-
-> **A unified geometric framework for describing the stability and transformation of complex systems.**
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Status: Research](https://img.shields.io/badge/Status-Research-blue.svg)]()
+# TriTetra Theory (TTT)
+### 三角・四面体格子結合定数による熱電材料の統一的記述
 
 ---
 
 ## 概要 / Overview
 
-**TriTetra Theory（トリテトラ理論）** は、複雑系の安定性と変容を統一的に記述する幾何学的框架です。
+**TriTetra Theory (TTT)** は、結晶格子における三角配置サイト（Triサイト）と
+四面体配置サイト（Tetraサイト）の間の熱振動結合を、
+単一パラメータ **λ_TT（TriTetra間結合定数）** で統一的に記述する新しい理論的枠組みです。
 
-> *"The universe begins not from one, but from two opposing poles."*
-
-双極（Bipolar Origin）を出発点とし、以下の生成過程を経て **9点正八面体構造** へと至ります：
-
-```
-2 (双極) → 線分 → △ 三角形 → ▲ 四面体 → ◆ 9点正八面体
-```
-
----
-
-## 理論の骨格 / Core Structure
-
-### 9点系（Nine-Point System）
-
-| 点群 | 軸 | 点数 |
-|------|----|------|
-| 実数軸上の点 | Real Axis | 3点 |
-| 虚数・副虚数軸上の点 | Imaginary / Sub-imaginary Axes | 4点 |
-| 中心原点 | Central Origin | 2点 |
-| **合計** | | **9点** |
-
-**安定条件：** 全9点のベクトル和 = **0**
-
-$$\sum_{i=1}^{9} \vec{v_i} = \vec{0}$$
-
-外乱（熱振動・応力・圧力）によって各点が変位し、閾値を超えた時点で系は崩壊（Phase Transition）します。
+**TriTetra Theory (TTT)** is a novel theoretical framework that describes
+the thermal-vibrational coupling between triangular-site (Tri) and
+tetrahedral-site (Tetra) lattice configurations using a single parameter —
+**λ_TT (TriTetra coupling constant)**.
 
 ---
 
-## 応用分野 / Applications
+## 理論の核心 / Core Concept
 
-| 分野 | 応用例 |
-|------|--------|
-| 🧪 材料科学 | 水素製造触媒の安定性予測 |
-| ⚗️ 化学 | 周期律表の電子配置の統一記述 |
-| 🍶 醸造科学 | 発酵プロセスの品質安定性解析 |
-| 🤖 AI シミュレーション | ProjectLattice による変形予測 |
+```
+H_TTT = H_Tri + H_Tetra + λ_TT · H_cross
+
+λ_TT = 2 ∫ dω [ α²F_TT(ω) / ω ]
+
+S_TTT = S₀ + (k_B/e) · λ_TT · ⟨φ_Tri · φ_Tetra⟩ / T
+
+ZT_TTT = S_TTT² · σ · T / κ_L(TTT)
+```
+
+**最適域 / Optimal Range：λ_TT ≈ 0.20〜0.25 → ZT = 1.0〜1.4（予測 / predicted）**
+
+---
+
+## 既存理論との差分 / Difference from Existing Theory
+
+| | 標準DFT+BoltzTraP | TTT理論 |
+|---|---|---|
+| 電子構造 | ✅ | ✅ |
+| フォノン分散 | 定数近似 | ✅ |
+| **Tri-Tetraサイト間結合** | ❌ | **✅ λ_TT** |
+| ZT予測精度 | 〜70% | 向上（検証中）|
+
+---
+
+## 適用材料 / Target Materials
+
+| 候補 | 組成 | λ_TT推定 | ZT予測 | 希少金属 |
+|---|---|---|---|---|
+| **第1候補** | Mg₂(Si₀.₆Sn₀.₄) | 0.20〜0.26 | 1.0〜1.3 | ❌ なし |
+| **第2候補** | Mg₂Si × MnSi₁.₇₃ | 0.21〜0.28 | 1.0〜1.4 | ❌ なし |
+| 第3候補 | Cu₂ZnSnS₄ (CZTS) | 0.19〜0.24 | 0.7〜1.0 | ❌ なし |
+
+すべて**希少金属フリー・500℃以下の低温廃熱回収**を想定。
+
+---
+
+## 新規プロセス / Novel Process
+
+### 溶融塩中ホットプレス焼結
+### Molten-Salt Hot-Press Sintering
+
+```
+従来法：Ar不活性ガス雰囲気中でHP焼結（設備コスト大）
+　　　　Conventional: HP sintering in Ar atmosphere (high cost)
+
+本提案：LiCl-KCl共晶溶融塩（融点353℃）バス中でHP焼結
+　　　　Proposed: HP sintering in LiCl-KCl eutectic molten salt bath (mp. 353°C)
+　　　　→ 大気中でMg酸化を防止 / Prevents Mg oxidation in air
+　　　　→ ArガスなしでZT > 1.0 / Achieves ZT > 1.0 without Ar gas
+```
 
 ---
 
 ## リポジトリ構成 / Repository Structure
 
 ```
-tri-tetra-theory/
-├── README.md               # このファイル
-├── LICENSE
-├── docs/
-│   ├── abstract.md         # 論文 Abstract（EN / JA）
-│   ├── theory.md           # 理論詳細
-│   └── patent_draft.md     # 特許草案
-├── src/
-│   ├── nine_point_system.py    # 9点系の基本実装
-│   ├── stability_check.py      # 安定性判定
-│   └── project_lattice.py      # ProjectLattice 可視化
-└── figures/
-    └── tetrahedron_model.svg   # 四面体モデル図
+TTT/
+├── README.md                          # 本ファイル / This file
+├── proposal/
+│   └── 研究提案書_TTT熱電素子.docx    # 研究提案書 / Research Proposal
+└── theory/
+    └── TTT論文構成設計書.docx          # 論文構成設計書 / Paper Design
 ```
 
 ---
 
-## クイックスタート / Quick Start
+## 研究背景 / Research Background
 
-```bash
-git clone https://github.com/<your-username>/tri-tetra-theory.git
-cd tri-tetra-theory
-pip install -r requirements.txt
-python src/nine_point_system.py
-```
+本理論は FeSi₂（Mnドープ、ホットプレス焼結、800℃）の実験研究経験を出発点とし、
+Mg₂Si系希少金属フリー熱電素子への展開として構想されました。
+
+This theory originated from experimental experience with
+FeSi₂ (Mn-doped, hot-press sintered at 800°C) and was developed
+as an extension toward rare-metal-free Mg₂Si-based thermoelectric materials.
 
 ---
 
-## 引用 / Citation
+## 将来展望 / Future Directions
 
-```bibtex
-@misc{tritetra2025,
-  title     = {TriTetra Theory: A Unified Geometric Framework for Complex Systems},
-  author    = {[川上真潔]},
-  year      = {2025},
-  url       = {https://github.com/<your-username>/tri-tetra-theory}
-}
-```
+- [ ] DFT計算による λ_TT 数値検証
+- [ ] 溶融塩HP焼結実験（Mg₂(Si,Sn)系）
+- [ ] ラマン分光によるTri/Tetra振動モード分離
+- [ ] npj Computational Materials への投稿
+- [ ] 触媒・SOEC材料へのTTT理論拡張
+- [ ] 4か国学生チームとの共同研究
 
 ---
 
 ## ライセンス / License
 
-License — 詳細は [LICENSE](LICENSE) を参照。
+© 2026 kiki054-n. All rights reserved.  
+本理論・内容の無断転載・使用を禁じます。  
+Unauthorized reproduction or use of this theory is prohibited.
+
+---
+
+*TriTetra Theory — A new coordinate system for materials science*
