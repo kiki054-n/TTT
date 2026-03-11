@@ -108,6 +108,7 @@ ZT_TTT = S_TTT² · σ · T / κ_L(TTT)
 | ⚗️ 化学 | 周期律表の電子配置の統一記述 |
 | 🍶 醸造科学 | 発酵プロセスの品質安定性解析 |
 | 🤖 AI シミュレーション | ProjectLattice による変形予測 |
+| ⚖️ 社会制度 | 三権構造の欠陥分析と四権構造による司法改革の提案 |
 
 ---
 
@@ -138,6 +139,14 @@ TTT/
 └── figures/
     └── tetrahedron_model.svg
 ```
+
+---
+
+## シミュレーター / Simulation
+
+🔬 **[正八面体ひずみシミュレーターを開く](https://htmlpreview.github.io/?https://github.com/kiki054-n/TTT/blob/main/ttt-simulation.html)**
+
+TTT理論の9点正八面体構造をリアルタイムで可視化。熱振動・外乱によるひずみの蓄積と破断のプロセスをブラウザ上で体験できます。
 
 ---
 
