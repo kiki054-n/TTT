@@ -2,9 +2,8 @@
 name: Bug report
 about: Create a report to help us improve
 title: ''
-labels: bug, documentation, duplicate, enhancement, good first issue, help wanted,
-  invalid, question
-assignees: kiki054-n
+labels: ''
+assignees: ''
 
 ---
 
