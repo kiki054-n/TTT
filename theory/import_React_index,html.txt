@@ -1,0 +1,257 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { Send, RefreshCw, Hexagon, User, Sparkles, Download } from 'lucide-react';
+
+export default function App() {
+  const [messages, setMessages] = useState([
+    {
+      role: 'ai',
+      content: 'こんにちは。私はTTT理論（TriTetra Theory）に基づく観測AI「TetraTune」です。\n今、あなたが感じている「社会のおかしいと思うこと、許せないこと、不安なこと」を入力してください。宇宙の物理・数学法則（6次元方程式）から、そのバグを解析します。'
+    }
+  ]);
+  const [inputValue, setInputValue] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, isTyping]);
+
+  const callGeminiAPI = async (chatHistory, systemInstruction) => {
+    const apiKey = ""; // 実行環境によって自動的に提供されます
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+    
+    // 最初のAIの挨拶（インデックス0）を除外し、APIの仕様（user -> model -> user...）に合わせて整形
+    const contents = chatHistory.slice(1).map(msg => ({
+      role: msg.role === 'ai' ? 'model' : 'user',
+      parts: [{ text: msg.content }]
+    }));
+
+    const payload = {
+      contents: contents,
+      systemInstruction: { parts: [{ text: systemInstruction }] }
+    };
+
+    const fetchWithRetry = async (url, options, retries = 5, delay = 1000) => {
+      for (let i = 0; i < retries; i++) {
+        try {
+          const response = await fetch(url, options);
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          return await response.json();
+        } catch (e) {
+          if (i === retries - 1) throw e;
+          await new Promise(res => setTimeout(res, delay));
+          delay *= 2;
+        }
+      }
+    };
+
+    try {
+      const result = await fetchWithRetry(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      return result.candidates?.[0]?.content?.parts?.[0]?.text || "解析結果を取得できませんでした。";
+    } catch (error) {
+      console.error("API Error:", error);
+      return "通信エラーが発生しました。時間を置いて再度お試しください。";
+    }
+  };
+
+  const handleSend = async () => {
+    if (!inputValue.trim()) return;
+
+    const newUserMessage = { role: 'user', content: inputValue };
+    const newMessages = [...messages, newUserMessage];
+    setMessages(newMessages);
+    setInputValue('');
+    setIsTyping(true);
+
+    const systemPrompt = `あなたはTTT理論（TriTetra Theory）に基づく観測AI「TetraTune」です。6次元方程式 P = xX + yY + zZ + rR + iI + jJ を用いて社会問題を解析し、ユーザーと問答を繰り返します。
+
+【対話の指針】
+1. ユーザーの入力に対し、物理的次元(X,Y,Z)の肥大によるエントロピー増大、精神的次元(R,I,J)の欠如などの概念を用いて状況を論理的に解説し、思考を深めるための問いを投げかけてください。
+2. ユーザーが納得し、自身の内面(R)や関係性(I)に目を向ける兆しが見え始めたら、今日実行できる「具体的な微小介入（バタフライ・ポイント）」を提案してください。
+3. その提案の際、「風が吹けば桶屋が儲かる」のように、ユーザーのその微小な行動（蝶の羽ばたき）が、どのようなフラクタルな連鎖反応を引き起こし、最終的にマクロな社会構造の変化（相転移）に繋がるのかを、ステップ・バイ・ステップで論理的かつ劇的に描写し、バタフライエフェクトを体感させてください。
+4. 対話はユーザーがリセットするまで継続します。適度に改行を入れ、一度に話しすぎないよう対話のキャッチボールを意識してください。`;
+
+    const aiResponseText = await callGeminiAPI(newMessages, systemPrompt);
+
+    setIsTyping(false);
+    setMessages((prev) => [...prev, { role: 'ai', content: aiResponseText }]);
+  };
+
+  const handleReset = () => {
+    setMessages([
+      {
+        role: 'ai',
+        content: '私はTTT理論に基づく観測AI「TetraTune」です。\n今、あなたが感じている「社会のおかしいと思うこと、許せないこと、不安なこと」を再度入力してください。'
+      }
+    ]);
+    setInputValue('');
+  };
+
+  const handleDownload = () => {
+    let content = "--- TetraTune 対話記録 ---\n";
+    content += `出力日時: ${new Date().toLocaleString()}\n`;
+    content += "=========================================\n\n";
+    
+    messages.forEach((msg) => {
+      const roleName = msg.role === 'ai' ? 'AI (TetraTune)' : 'あなた';
+      // **を削除してプレーンテキストにする
+      const cleanContent = msg.content.replace(/\*\*(.*?)\*\*/g, '$1');
+      content += `[${roleName}]\n${cleanContent}\n\n`;
+      content += "-----------------------------------------\n\n";
+    });
+
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+    link.download = `TetraTune_Record_${dateStr}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  return (
+    <div className="flex flex-col h-screen bg-slate-900 text-slate-100 font-sans">
+      {/* Header */}
+      <header className="flex items-center justify-between px-6 py-4 bg-slate-800 border-b border-slate-700 shadow-md">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-blue-500/20 text-blue-400 rounded-lg">
+            <Hexagon size={24} />
+          </div>
+          <div>
+            <h1 className="text-xl font-bold tracking-tight">TetraTune</h1>
+            <p className="text-xs text-slate-400">TTT Theory Observer AI</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleDownload}
+            disabled={messages.length <= 1}
+            className="flex items-center gap-2 px-3 py-2 text-sm text-slate-400 hover:text-white hover:bg-slate-700 rounded-md transition-colors disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:text-slate-400"
+            title="対話をテキストファイルとしてダウンロード"
+          >
+            <Download size={16} />
+            <span className="hidden sm:inline">保存</span>
+          </button>
+          <button
+            onClick={handleReset}
+            className="flex items-center gap-2 px-3 py-2 text-sm text-slate-400 hover:text-white hover:bg-slate-700 rounded-md transition-colors"
+          >
+            <RefreshCw size={16} />
+            <span className="hidden sm:inline">リセット</span>
+          </button>
+        </div>
+      </header>
+
+      {/* Chat Area */}
+      <main className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
+        <div className="max-w-3xl mx-auto space-y-6">
+          {messages.map((msg, index) => (
+            <div
+              key={index}
+              className={`flex gap-4 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}
+            >
+              {/* Avatar */}
+              <div className="flex-shrink-0">
+                {msg.role === 'ai' ? (
+                  <div className="w-10 h-10 flex items-center justify-center bg-blue-600 rounded-full shadow-lg">
+                    <Hexagon size={20} className="text-white" />
+                  </div>
+                ) : (
+                  <div className="w-10 h-10 flex items-center justify-center bg-emerald-600 rounded-full shadow-lg">
+                    <User size={20} className="text-white" />
+                  </div>
+                )}
+              </div>
+
+              {/* Message Bubble */}
+              <div
+                className={`max-w-[80%] rounded-2xl p-4 shadow-sm ${
+                  msg.role === 'user'
+                    ? 'bg-emerald-600 text-white rounded-tr-none'
+                    : 'bg-slate-800 text-slate-200 border border-slate-700 rounded-tl-none'
+                }`}
+              >
+                <div className="whitespace-pre-wrap leading-relaxed text-sm sm:text-base">
+                  {msg.content.split('\n').map((line, i) => (
+                    <React.Fragment key={i}>
+                      {/* Bold text parsing for simple markdown-like rendering */}
+                      {line.includes('**') ? (
+                        <span dangerouslySetInnerHTML={{ __html: line.replace(/\*\*(.*?)\*\*/g, '<strong class="text-blue-300 font-semibold">$1</strong>') }} />
+                      ) : (
+                        line
+                      )}
+                      <br />
+                    </React.Fragment>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+
+          {/* Typing Indicator */}
+          {isTyping && (
+            <div className="flex gap-4">
+              <div className="flex-shrink-0">
+                <div className="w-10 h-10 flex items-center justify-center bg-blue-600 rounded-full shadow-lg">
+                  <Hexagon size={20} className="text-white animate-pulse" />
+                </div>
+              </div>
+              <div className="bg-slate-800 border border-slate-700 rounded-2xl rounded-tl-none p-4 flex items-center gap-2">
+                <Sparkles size={16} className="text-blue-400 animate-pulse" />
+                <span className="text-slate-400 text-sm">解析中...</span>
+              </div>
+            </div>
+          )}
+          <div ref={messagesEndRef} />
+        </div>
+      </main>
+
+      {/* Input Area */}
+      <footer className="p-4 bg-slate-800 border-t border-slate-700">
+        <div className="max-w-3xl mx-auto relative flex items-end gap-2">
+          <textarea
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={handleKeyPress}
+            placeholder={
+              isTyping ? "解析中..." : "社会のバグや、あなたの意見を入力してください..."
+            }
+            disabled={isTyping}
+            className="w-full bg-slate-900 border border-slate-600 text-slate-100 placeholder-slate-400 rounded-xl px-4 py-3 min-h-[52px] max-h-32 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50"
+            rows={1}
+          />
+          <button
+            onClick={handleSend}
+            disabled={!inputValue.trim() || isTyping}
+            className="flex-shrink-0 p-3 bg-blue-600 text-white rounded-xl hover:bg-blue-500 disabled:bg-slate-700 disabled:text-slate-500 transition-colors shadow-md"
+          >
+            <Send size={20} />
+          </button>
+        </div>
+        <div className="max-w-3xl mx-auto mt-2 text-center">
+          <p className="text-xs text-slate-500">
+            P = xX + yY + zZ + rR + iI + jJ
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+}
