@@ -1,4 +1,4 @@
-# TriTetra Theory（TTT）/ トリテトラ理論
+> **最新: 完全版v2公開** → [TRI-TETRA THEORY COMPLETE v2 - ΣV=0・JIK=-1・137・1836](https://kiki054-n.github.io/ttt-complete-v2/)# TriTetra Theory（TTT）/ トリテトラ理論
 
 **日本語** | [English](#english)
 
