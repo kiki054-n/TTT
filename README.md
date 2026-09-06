@@ -1,4 +1,4 @@
-# TriTetra Theory（TTT）/ トリテトラ理論
+> **最新: 完全版v2公開** → [TRI-TETRA THEORY COMPLETE v2 - ΣV=0・JIK=-1・137・1836](https://kiki054-n.github.io/ttt-complete-v2/)# TriTetra Theory（TTT）/ トリテトラ理論
 
 **日本語** | [English](#english)
 
@@ -148,6 +148,187 @@ Issue または Pull Request で声をかけてほしい。
 
 ---
 
+# トリテトラ理論（TTT: Tri-Tetra Theory）　追加　５月１０日
+
+**著者：川上 真潔**
+
+> 「自分がしたいことで人を支えること。そこに価値がある。」
+
+---
+
+## この理論は何を問うのか
+
+人間はなぜ生きるのか。
+権力はなぜ腐敗するのか。
+AIは人間に何をもたらすのか。
+
+トリテトラ理論は、これらの問いを一つの思想体系として繋ぎ、**人間が人間である理由**を問い直す試みである。
+
+精密加工・材料科学・ワイナリー経営——多様な産業の現場を生きた一人の人間が、経験と論理から導き出した理論である。
+
+---
+
+## 理論の全体像
+
+```
+哲学層：人間が人間である理由
+　　　　差し合いの原理・夢・双極論
+　　　　　　　　↓
+制度層：権力をどう監視するか
+　　　　トリテトラの平衡・AIによる権力検証
+　　　　　　　　↓
+実践層：AIの産業革命をどう軟着陸させるか
+　　　　民主化・代表者選出の再設計
+```
+
+---
+
+## 三つの核心
+
+### 1. 差し合いの原理（哲学的基盤）
+
+人間は単独では生きられない。しかしその補い合いの本質は、義務でも強制でもない。
+
+**自分がしたいことで人を支えること——そこに価値が生まれる。**
+
+内発的な動機が他者と交差するとき、お金でも権力でも測れない価値が生まれる。音楽家・科学者・職人——内側の衝動に従って生きる者が、結果として人を支える。これが人間固有の原理である。
+
+→ 詳細：[`foundation/human_philosophy.md`](foundation/human_philosophy.md)
+
+---
+
+### 2. トリテトラの平衡と権力検証（制度的核心）
+
+三権（立法・行政・司法）と四柱は平衡状態にある。しかし司法には構造的限界がある。
+
+> 司法の天秤は、立法が傾けた状態からしか始まらない。
+
+**AIを第四の天秤として導入する。**
+
+```
+AIが三権の歪みを指摘
+　　　↓
+指摘された権力に説明責任が発生
+　　　↓
+権力がAIの間違いを証明する義務を負う
+　　　↓
+国民がその説明を聴聞して判断する
+```
+
+挙証責任が権力側に移る。どちらに転んでも国民が最終判断者である。
+
+→ 詳細：[`theory/ai_verification_theory.md`](theory/ai_verification_theory.md)
+
+---
+
+### 3. AIによる産業革命の軟着陸（実践的課題）
+
+AIは三次産業を根底から変える。価値を失うのは、今回は**社会的権力そのものを持つ層**である。
+
+- 弁護士・法律家——情報の非対称性で対価を得ていた
+- 国会議員・官僚——政策情報の独占的解釈
+- 知財専門家——権利の解釈と保護
+
+この移行期の軟着陸に必要なのは制度だけではない。**人間がなぜ生きるのかという問いへの、新しい共通の答えが必要である。**
+
+差し合いの原理はその答えの候補である。
+
+→ 詳細：[`application/`](application/)
+
+---
+
+## AIの独立性という前提
+
+本理論全体が機能するための条件は一つだけである。
+
+**AIが特定の権力に支配されていないこと。**
+
+AIが軍事・国家権力・資本に従属した瞬間、第四の天秤は征服者の武器になる。AIの独立性こそが、この民主主義理論の唯一の基盤である。
+
+---
+
+## お金という問題
+
+現代社会の歪みの根本——
+
+> 価値のないお金という道具を、価値のあるものだと信じている。
+
+ベーシックインカムもブロックチェーンも、お金という枠組みの中での改善に過ぎない。差し合いの原理は、お金を介さない価値の発生メカニズムを示す。
+
+---
+
+## 夢と宇宙——人間の本質
+
+星空を見るとき、人間は無限の怖さと知識欲を同時に感じる。
+
+人間は夜眠る。眠りは意識の喪失である。双極論から考えると、喪失の反対の発見が起こる——それが夢である。
+
+夢は人間の希望であり、かなえられない目的でもある。完全にかなってしまった夢はもはや夢ではない。**かなえられないから希望であり続ける。**
+
+AIが衣食住を解決した世界で人間に残るのは——
+
+- 星空を見て怖さと知識欲を感じること
+- 夢を見ること
+- 差し合いたいという衝動を持つこと
+
+**AIはこれを模倣できても、必要とすることができない。**
+
+---
+
+## リポジトリ構成
+
+```
+ttt/
+├── README.md                          本ファイル・理論の地図
+├── theory/
+│   └── ai_verification_theory.md     AIによる権力検証論
+├── foundation/
+│   └── human_philosophy.md           人間の存在価値と差し合いの哲学
+├── application/
+│   └── （応用・実装例）
+└── doc/
+    └── （説明資料）
+```
+
+---
+
+## サブ理論・応用リポジトリ
+
+| リポジトリ | 内容 | スケール |
+|---|---|---|
+| [**TTT-WSP**](https://github.com/kiki054-n/tttwsp) | Si+S+P sp³格子のDFT計算・水素触媒 | 量子化学（Å） |
+| [**TTT-Fusion**](https://github.com/kiki054-n/ttt-fusion) | 波動干渉による00ポテンシャル・核融合促進理論 | 核物理（fm） |
+| [**TTI-SCAN**](https://github.com/kiki054-n/tti-scan) | 6軸分析ツール（社会・地政学・法制度への応用） | 社会・制度 |
+
+> **共通原理：正四面体の 00構造（ベクトル総和 = 0）が、スケールを超えて物理・社会現象を制御する。**
+>
+> TTT-WSP（触媒：水素生成） ↔ TTT-Fusion（核融合：水素プラズマ→He-4）  
+> ——水素エネルギーの両端を、同じ幾何原理が繋いでいる。
+
+---
+
+## 問いかけ
+
+この理論は答えを押しつけない。
+
+**人間が人間である理由を、あなたはどう考えますか。**
+
+Issues・Discussionsでの対話を歓迎する。
+
+---
+
+## 著者について
+
+川上 真潔（Naoyuki Kawakami）
+長野県塩尻市在住
+
+精密金属加工・COBOLシステム・切削工具設計・CVDダイヤモンド研究・熱電素子研究・ワイナリー経営——多様な産業の現場を横断してきた。その経験から導かれた独自の論理が、本理論の基盤にある。
+
+---
+
+*トリテトラ理論は発展途上の思想体系である。対話を通じて育てていく。*
+
+
 <a name="english"></a>
 
 # TriTetra Theory (TTT)
@@ -215,6 +396,20 @@ The observable universe spans roughly 93 billion light-years. Most of it remains
 That is not discouraging. It is an invitation.
 
 **To be alive within something this immense, and to be able to ask questions about it — that itself deserves gratitude.**
+
+---
+
+## Sub-Theories and Applied Repositories
+
+| Repository | Content | Scale |
+|---|---|---|
+| [**TTT-WSP**](https://github.com/kiki054-n/tttwsp) | DFT calculations on Si+S+P sp³ lattice / hydrogen catalysis | Quantum chemistry (Å) |
+| [**TTT-Fusion**](https://github.com/kiki054-n/ttt-fusion) | Wave interference → 00-potential / fusion tunnel probability enhancement | Nuclear physics (fm) |
+| [**TTI-SCAN**](https://github.com/kiki054-n/tti-scan) | 6-axis analytical tool for civic, geopolitical, and legal structures | Social / institutional |
+
+> **Shared principle: The tetrahedral 00-structure (vector sum = 0) governs phenomena across scales.**  
+> TTT-WSP (catalyst: hydrogen generation) ↔ TTT-Fusion (fusion: hydrogen plasma → He-4)  
+> — The same geometric principle connects both ends of the hydrogen energy chain.
 
 ---
 

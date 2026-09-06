@@ -1,0 +1,73 @@
+% TTT v2.2.2 - Derivation of 12 = 3x4
+\documentclass[a4paper,11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{physics}
+\usepackage{tikz}
+\usetikzlibrary{3d}
+\usepackage{geometry}
+\geometry{margin=25mm}
+\usepackage{hyperref}
+
+\title{TTT v2.2.2 Belly Beads Edition: Addendum\\
+$\alpha^{-1}=5^{3}+3\times4$ -- Geometric Origin of Fine Structure Constant\\
+as Tri$\times$Tetra Closure Cost}
+\author{Kawakami Naoyuki\\ Belly Beads Vineyard \& Winery, Shiojiri, Japan}
+\date{2026-07-29}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+TTT v2.1 defined closure $XYZ\cdot\hat{P}=1$ with $XYZ=-1$. The critical number $N_c=5^3=125$ was the last stable cubic containment for $N(k)=6\cdot3^k$. Overflow $\Delta N=37$ and $\alpha^{-1}=137$ were observed as $125+12$ and $25+12$ with empirical coincidence. This addendum proves $12$ is not ad hoc but $Z_{FCC}=3\times4$, the kissing number in 3D, decomposable as 3 axes $\times$ 4 azimuthal neighbours. Then $\alpha^{-1}=n_c^3+Z_{FCC}$ is bulk + binding surface cost to close a $5^3$ cluster, and $\Delta N = n_c^2+Z_{FCC}$ is face + edge cost. Hence $\alpha^{-1}=5^3+3\times4$, $\Delta N=5^2+3\times4$.
+\end{abstract}
+
+\section{Axioms (v2.1)}
+\begin{align*}
+&\text{Def: } \pi_c=3.14159\ldots,\quad \hat{P}\equiv e^{i\pi_c},\quad X,Y,Z\sim i,j,k\in\mathbb{H}\\
+&\text{A1 (Bipolar conjugate): } X\odot Y=1,\;Y\odot Z=1,\;Z\odot X=1\\
+&\text{A2 (Non-degenerate): } (X,Y,Z)\neq(1,1,1)\\
+&\text{Thm1: } XYZ=-1 \quad (ijk=-1)\\
+&\text{Thm2: } XYZ\cdot\hat{P}=1 \quad \text{(closure)}
+\end{align*}
+
+\section{12 as Kissing Number $Z_{FCC}=12$}
+In 3D densest FCC packing, maximal spheres touching one central sphere is
+$$Z_{FCC}=12$$
+This is the kissing number. It is also number of edges of cube and octahedron.
+
+\textbf{Lemma 1 (Tri$\times$Tetra decomposition):}
+$$Z_{FCC}=3\times4$$
+Proof: Fix axis $e_X$. Its orthogonal complement is $span(e_Y,e_Z)$ with 4 quadrants $(\pm Y,\pm Z)$. Each quadrant hosts one neighbour that kisses $e_X$. So $e_X$ contributes 4. Similarly $e_Y$ and $e_Z$ contribute 4 each. Total $3\times4=12$. $\square$
+
+Geometrically:
+\begin{itemize}
+\item $X$-axis $\to$ neighbours at $(\pm Y, \pm Z)$: 4
+\item $Y$-axis $\to$ neighbours at $(\pm Z, \pm X)$: 4
+\item $Z$-axis $\to$ neighbours at $(\pm X, \pm Y)$: 4
+\end{itemize}
+Hence TTT name Tri(3)$\times$Tetra(4)=12 is topological invariant of 3D.
+
+\section{Closure Cost Derivation}
+Consider cubic cluster $n_c^3$ with $n_c=5$ last stable from $N(k)=6\cdot3^k$ vs $n^3$.
+To isolate cluster from background, need:
+\begin{itemize}
+\item bulk cost $E_{bulk}\propto n_c^3=125$
+\item binding cost $E_{bind}\propto Z_{FCC}=12$ to cut kissing bonds.
+\end{itemize}
+Total closure cost:
+$$\boxed{E_{close}=n_c^3+Z_{FCC}=125+12=137=\alpha^{-1}}$$
+Thus fine structure constant inverse is energy to close $5^3$.
+
+For overflow:
+Face $5^2=25$ plus edge binding $12$ must be paid when $N=162$ exceeds $125$:
+$$\boxed{\Delta N = n_c^2+Z_{FCC}=25+12=37}$$
+$$m/m_0 = \Delta N/N = 37/162 = 0.228 \approx \sin^2\theta_W$$
+$$37/137=27.0\%\approx\Omega_{DM},\quad 93/137=67.9\%\approx\Omega_{DE}$$
+
+\section{Interpretation as Belly Beads}
+Baily's Beads: ring closure needs beads at edge. Volume alone does not close; beads (binding) at 12 edges complete ring. $5^3$ is ring, $3\times4$ are beads. $\alpha^{-1}=137$ beads needed to see light.
+
+\section{Testable Prediction}
+If $\alpha^{-1}=n_c^3+Z_{FCC}$, then in $d$ dimensions $\alpha_d^{-1}=n_c^d+Z_d$ with $Z_d$ kissing number. This links varying $\alpha$ theories to dimensional crossover.
+
+\end{document}

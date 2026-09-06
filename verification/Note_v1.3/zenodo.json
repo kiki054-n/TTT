@@ -1,0 +1,44 @@
+{
+  "title": "TTT Verification Note v1.3 — Golden-Ratio Solids as the Asymmetric Self-Referential Solution of the Hyperbolic-Zero Equation",
+  "description": "<p>Machine verification (Python/sympy, exact symbolic arithmetic) showing that the golden ratio &phi; arises as the unique asymmetric self-referential solution of the Hyperbolic-Zero equation Y=1/X (symmetric condition Y=X gives X=&plusmn;1; minimal asymmetric condition Y=X+1 gives X=1/&phi;, exactly). This is connected to the previously machine-verified &phi;-bipartition of the five Platonic solids (icosahedron and dodecahedron embed &phi; exactly in their coordinates; tetrahedron, octahedron, and cube do not). The squared circumradius-to-inradius ratio is shown to share a common factor of 3 across all solid families: 3&sup2; (tetrahedron), 3&sup9; (octahedron/cube), and 3(7-4&phi;) (icosahedron/dodecahedron). The product of the &phi;-group enclosing-sphere volume ratios (2.037 &times; 2.749 = 5.599) is compared to the observed dark-matter-to-baryonic-matter ratio (~5.4), differing by 3.7%. A working hypothesis [C] is presented connecting the algebraic property that asymmetric solutions of Y=1/X cannot be defined without a paired counterpart to the observational property that dark matter has never been detected in isolation. All physical identifications are explicitly classified as interpretive [B]/[C]; only the algebraic and geometric identities are classified [A]. Supplement to TTT v2.0 (10.5281/zenodo.19704117) and successor to TTT_Verification_Note_v1.1/v1.2.</p>",
+  "creators": [
+    {
+      "name": "Kawakami, Naoyuki",
+      "affiliation": "Team Shiojiri / Cooperate Craft Wine Makers",
+      "orcid": "0009-0009-2972-6511"
+    }
+  ],
+  "upload_type": "publication",
+  "publication_type": "workingpaper",
+  "access_right": "open",
+  "license": "cc-by-4.0",
+  "keywords": [
+    "golden ratio",
+    "Tri-Tetra Theory",
+    "TTT",
+    "hyperbolic zero",
+    "dark matter",
+    "self-referential equation",
+    "Platonic solids",
+    "machine verification",
+    "sympy",
+    "exact arithmetic",
+    "open science"
+  ],
+  "language": "jpn",
+  "related_identifiers": [
+    {
+      "identifier": "10.5281/zenodo.19704117",
+      "relation": "isSupplementTo",
+      "resource_type": "publication-workingpaper",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5281/zenodo.21103588",
+      "relation": "references",
+      "resource_type": "publication-workingpaper",
+      "scheme": "doi"
+    }
+  ],
+  "notes": "Reproduction: pip install sympy; python3 verify_golden_ratio_v13.py — all assertions pass, exit code 0. Code license: MIT. This note is exploratory; physical identifications of golden-ratio solids with dark matter are working hypotheses, not established results."
+}

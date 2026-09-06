@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this verification note or code, please cite it as below."
+title: "TTT Verification Note v1.1 — Platonic Solids Supplement"
+version: "1.1"
+date-released: "2026-07-05"
+authors:
+  - family-names: "Kawakami"
+    given-names: "Naoyuki"
+    orcid: "https://orcid.org/0009-0009-2972-6511"
+    affiliation: "Team Shiojiri / Cooperate Craft Wine Makers"
+keywords:
+  - Platonic solids
+  - Tri-Tetra Theory
+  - machine verification
+  - sympy
+  - golden ratio
+  - dual polyhedra
+license: CC-BY-4.0
+references:
+  - type: report
+    title: "TTT v2.0"
+    doi: "10.5281/zenodo.19704117"
+  - type: report
+    title: "TTT_Verification_Note_v1.0"
+    doi: "10.5281/zenodo.21103588"

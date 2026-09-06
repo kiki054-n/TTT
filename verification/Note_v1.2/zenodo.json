@@ -1,0 +1,45 @@
+{
+  "title": "TTT Verification Note v1.2 — Unified Enclosing-Sphere Structure of the Five Platonic Solids and a Geometric Origin Hypothesis for Dark Matter",
+  "description": "<p>Machine verification (Python/sympy, exact symbolic arithmetic) of the unified enclosing-sphere structure across all five Platonic solids, in the context of the Hyperbolic-Zero / Tri-Tetra Theory (TTT) fusion framework. Four families of results are verified: (A-1) for every Platonic solid, the individual enclosing spheres centered at adjacent vertices are exactly mutually tangent (a = 2R_ind, verified for all five solids); (A-2) the enclosing sphere radius satisfies R_5th = R + a/2 for all five solids, with the unified decomposition R_5th/r = R/r + a/(2r) using the inradius as the base unit; (A-3) the volume ratio V_5th/(N·V_ind) lies in the range 2.04–2.75 for all five solids, with the tetrahedron and dodecahedron showing near-identical values (difference 0.14%); (A-4) vertex vector sums are zero for all five solids (center-is-zero rule, confirmed from v1.0/v1.1). A working hypothesis [C] is presented identifying the (V+1)-th enclosing sphere as the geometric prototype for dark matter, with the layered product of per-level volume ratios (icosahedron × dodecahedron ≈ 5.60) approaching the observed DM/baryon ratio of 5.4. Supplement to TTT v2.0 (10.5281/zenodo.19704117); new version of TTT_Verification_Note_v1.1.</p>",
+  "creators": [
+    {
+      "name": "Kawakami, Naoyuki",
+      "affiliation": "Team Shiojiri / Cooperate Craft Wine Makers",
+      "orcid": "0009-0009-2972-6511"
+    }
+  ],
+  "upload_type": "publication",
+  "publication_type": "workingpaper",
+  "access_right": "open",
+  "license": "cc-by-4.0",
+  "keywords": [
+    "Platonic solids",
+    "Tri-Tetra Theory",
+    "TTT",
+    "hyperbolic zero",
+    "dark matter",
+    "enclosing sphere",
+    "machine verification",
+    "sympy",
+    "exact arithmetic",
+    "golden ratio",
+    "circumradius inradius",
+    "open science"
+  ],
+  "language": "jpn",
+  "related_identifiers": [
+    {
+      "identifier": "10.5281/zenodo.19704117",
+      "relation": "isSupplementTo",
+      "resource_type": "publication-workingpaper",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5281/zenodo.21103588",
+      "relation": "isNewVersionOf",
+      "resource_type": "publication-workingpaper",
+      "scheme": "doi"
+    }
+  ],
+  "notes": "Reproduction: pip install sympy; python3 verify_platonic_v12.py — all assertions pass, exit code 0. Code license: MIT."
+}

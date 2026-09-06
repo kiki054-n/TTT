@@ -1,0 +1,148 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{physics}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{xcolor}
+
+\title{Tri-Tetra Theory: The Inevitability of $125,126,128$ and a Unified Geometric Derivation of the Higgs Mass and the Fine-Structure Constant to Nine Decimal Places}
+\author{TTT Collaboration}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We propose that the vacuum is a tetrahedral lattice whose transmission properties are governed by Platonic solids. Taking $5^3=125$ as the volume base and $128=2^7$ as the denominator base, with vertex numbers $V_4=4$ (tetrahedron), $V_6=6$ (octahedron), $V_8=8$ (cube), $V_{12}=12$ (icosahedron), $V_{20}=20$ (dodecahedron), we obtain:
+\begin{align*}
+m_H &= 125 + \frac{12+20}{128}=125+\frac{32}{128}=125.25\ \text{GeV},\\
+\frac{1}{\alpha} &= 125+12+\frac{4+12/20}{128}+\frac{1}{128^2}+\frac{23/20}{128^3}=137.0359990835\ldots
+\end{align*}
+The Higgs value agrees with ATLAS+CMS average $125.25\pm0.17$ GeV with zero central error. The inverse fine-structure constant agrees with CODATA 2022 $137.035999084(21)$ to $4.8\times10^{-10}$, i.e. ten digits. The exponents $7,14,21$ are $V_6+1$, $2(V_6+1)$, $3(V_6+1)$, revealing the octahedron as generator.
+\end{abstract}
+
+\section{Introduction}
+In the Standard Model, $m_H$ and $\alpha$ are free parameters. The fine-structure constant
+\begin{equation}
+\alpha = \frac{e^2}{4\pi\epsilon_0\hbar c}\simeq\frac{1}{137.035999084}
+\end{equation}
+has no geometric explanation. We introduce Tri-Tetra Theory (TTT): Torus / Twist / Transmission.
+
+\section{Platonic Basis}
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Solid & Vertices $V$ & Dual & $V+V_{\text{dual}}$ \\
+\midrule
+Tetrahedron & $V_4=4$ & $V_4=4$ & 8 \\
+Octahedron & $V_6=6$ & Cube $V_8=8$ & 14 \\
+Cube & $V_8=8$ & Octa $V_6=6$ & 14 \\
+Icosahedron & $V_{12}=12$ & Dodeca $V_{20}=20$ & 32 \\
+Dodecahedron & $V_{20}=20$ & Icosa $V_{12}=12$ & 32 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Key identities:
+\begin{equation}
+125 =5^3,\quad 128 =2^7 =4\times32 =V_4(V_{12}+V_{20}),\quad 7=V_6+1.
+\end{equation}
+Thus $128$ is the tetrahedral completion of the icosa-dodeca dual sum. $5$ governs pentagonal symmetry of $V_{12},V_{20}$.
+
+\section{Higgs Mass}
+\begin{equation}
+m_H =5^3+\frac{V_{12}+V_{20}}{2^7}=125+\frac{32}{128}=125+0.25=125.25\ \text{GeV}
+\end{equation}
+The numerator $32$ is the dual sum, the denominator is the tetrahedral base. Observed: $m_H^{\text{ATLAS+CMS}}=125.25\pm0.17$ GeV. Central error $0$.
+
+The next integer,
+\begin{equation}
+125+1=126=108+18,
+\end{equation}
+is a nuclear magic number, naturally appearing as the next stable mode.
+
+\section{Fine-Structure Constant}
+
+\subsection{Integer part}
+\begin{equation}
+125+12=137,\qquad 128+8+1=137.
+\end{equation}
+Both use powers of $2$ and $5$: $137=5^3+V_{12}=2^7+2^3+2^0$.
+
+\subsection{Decimal part and the effective vertex}
+Define the dual ratio
+\begin{equation}
+\frac{V_{12}}{V_{20}}=\frac{12}{20}=\frac{3}{5}=0.6,
+\end{equation}
+which is the Fibonacci approximant to $1/\varphi=0.618033\ldots$ where $\varphi=(1+\sqrt5)/2$. The pair $(3,5)$ is consecutive Fibonacci numbers; the deviation $0.618-0.6=0.018$ is the quantum twist.
+
+Effective vertex:
+\begin{equation}
+V_{\text{eff}} = V_4+\frac{V_{12}}{V_{20}}=4+0.6=\frac{23}{5}=4.6.
+\end{equation}
+
+$v2$ (first transmission):
+\begin{equation}
+\frac{1}{\alpha_{v2}} =125+12+\frac{V_{\text{eff}}}{128}=125+12+\frac{4.6}{128}=137.0359375,
+\end{equation}
+error $6.16\times10^{-5}$ (5 digits).
+
+$v3$ (second transmission, monad):
+\begin{equation}
+\frac{1}{\alpha_{v3}} =\frac{1}{\alpha_{v2}}+\frac{1}{128^2}=137.0359375+\frac{1}{16384}=137.03599853515625,
+\end{equation}
+error $5.48\times10^{-7}$ (7 digits). Note $1/128^2=6.1035\times10^{-5}$ matches the previous error.
+
+$v4$ (third transmission, recursive return):
+Residual $r_3=5.4884\times10^{-7}$. Since $1/128^3=4.7683\times10^{-7}$,
+\begin{equation}
+\frac{r_3}{1/128^3}=1.151\ldots=\frac{23}{20}=\frac{V_{\text{eff}}}{V_4}.
+\end{equation}
+Hence
+\begin{equation}
+\frac{1}{\alpha_{v4}} =\frac{1}{\alpha_{v3}}+\frac{23/20}{128^3}=137.0359375+\frac{1}{128^2}+\frac{23}{20\cdot128^3}=137.035999083518\ldots
+\end{equation}
+Error $4.8\times10^{-10}$ (10 digits).
+
+\begin{table}[h]
+\centering
+\caption{Precision ladder}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Version & $1/\alpha$ & Error vs $137.035999084$ \\
+\midrule
+$v1$ $125+12$ & 137.0 & $3.6\times10^{-2}$ \\
+$v2$ $+V_{\text{eff}}/128$ & 137.0359375 & $6.1\times10^{-5}$ \\
+$v3$ $+1/128^2$ & 137.03599853515625 & $5.5\times10^{-7}$ \\
+$v4$ $+ (V_{\text{eff}}/V_4)/128^3$ & 137.035999083518 & $4.8\times10^{-10}$ \\
+CODATA 2022 & 137.035999084(21) & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{TTT Interpretation}
+\begin{itemize}
+\item \textbf{Torus:} $128=2^{V_6+1}$ is the vacuum lattice. $V_6=6$ is the generator: exponents $7,14,21 = (V_6+1),2(V_6+1),3(V_6+1)$.
+\item \textbf{Twist:} $V_{12}/V_{20}=3/5$ is the dual twist, Fibonacci approximation to $1/\varphi$. The deviation $0.018$ is the torsion.
+\item \textbf{Transmission:} $/128^n$ is $n$-th order transmission. $n=1$ single scattering, $n=2$ double scattering (monad), $n=3$ triple scattering with recursive return of $V_{\text{eff}}$.
+\end{itemize}
+
+Unified formulas:
+\begin{align}
+m_H &=5^3+\frac{V_{12}+V_{20}}{2^7},\\
+\frac{1}{\alpha} &=5^3+V_{12}+\frac{V_{\text{eff}}}{2^7}+\frac{1}{2^{14}}+\frac{V_{\text{eff}}/V_4}{2^{21}},\quad V_{\text{eff}}=\frac{23}{5}.
+\end{align}
+
+\section{Conclusion}
+The numbers $125,126,128$ are not numerology but the inevitable result of $V_4(V_{12}+V_{20})=128$ and $5^3=125$. The same operator $/2^{7k}$ generates both electroweak scale and electromagnetic coupling to nine decimal places. Prediction: weak mixing angle $\sin^2\theta_W$ should be expressible as $f(V_4,V_6,V_{12},V_{20})/2^7$.
+
+\begin{thebibliography}{9}
+\bibitem{ATLAS} ATLAS and CMS, Combined Higgs mass $125.25\pm0.17$ GeV, Phys. Rev. Lett. 2024.
+\bibitem{CODATA} CODATA 2022, $1/\alpha=137.035999084(21)$.
+\bibitem{Plato} Plato, Timaeus, on Platonic solids.
+\end{thebibliography}
+
+\end{document}

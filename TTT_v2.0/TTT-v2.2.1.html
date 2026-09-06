@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TTT v2.2.1 - Belly Beads Edition</title>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+  body { font-family: 'Noto Sans JP', 'Hiragino Sans', Meiryo, sans-serif; max-width: 880px; margin: 40px auto; padding: 0 24px; line-height: 2.05; color: #1a1a1a; background:#fdfaf5; }
+  h1 { font-size: 23px; text-align:center; color:#4a1f0f; border-bottom: 4px solid #c9a063; padding-bottom:14px; line-height:1.4; }
+  h2 { font-size: 16px; color:#fff; background:#7a4a2a; margin-top:40px; padding:8px 14px; border-radius:6px; }
+  h3 { font-size: 14px; color:#7a4a2a; margin-top:24px; border-bottom:2px solid #e8dcc8; padding-bottom:4px; }
+  .meta { text-align:center; font-size: 12px; color:#666; margin:18px 0 30px; line-height:1.7; }
+  .box { background:#fff; border:1px solid #e8dcc8; border-left:4px solid #c9a063; border-radius:8px; padding:16px 20px; margin:16px 0; }
+  .formula { text-align:center; margin:20px 0; font-size:15px; background:#fff8ec; padding:14px; border-radius:8px; border:1px solid #f0e0b8; }
+  table { width:100%; border-collapse:collapse; margin:14px 0; font-size:13px; }
+  th { background:#7a4a2a; color:white; padding:8px; }
+  td { border:1px solid #ddd; padding:7px; text-align:center; background:white; }
+  .hl { background:#fff3b0; font-weight:bold; }
+  .story { background: linear-gradient(135deg, #fff8ec 0%, #fff0e0 100%); border:2px solid #c9a063; border-radius:12px; padding:20px 24px; margin:24px 0; font-size:13.5px; line-height:1.9; }
+  .footer { margin-top:50px; font-size:11px; color:#888; text-align:center; border-top:1px solid #ddd; padding-top:16px; }
+</style>
+</head>
+<body>
+
+<h1>TTT v2.2.1 Belly Beads Edition<br>XYZπ=1 からの宇宙閉包理論<br><span style="font-size:13px; color:#7a4a2a;">125臨界・UVW回転・137の幾何学的起源</span></h1>
+
+<div class="meta">著者：川上真潔 (Kawakami Naoyuki)<br>Belly Beads Vineyard & Winery, Shiojiri, Nagano - 日本のへその近くのおなかから<br>2026-07-19 / Belly Beads Edition</div>
+
+<div class="story">
+<b>Belly Beads という名前の由来</b><br><br>
+Belly Beads Wineryは、正しくは <b>Belly Beads</b> - おなかに巻く飾りです。<br>
+塩尻は日本のへその近く、おなかに位置するから。<br>
+金環食の時に現れる光の粒、<b>ベイリーズビーズ (Baily's Beads)</b> から、ワインで人をつないで、ビーズの飾りを作ろうと名付けました。<br><br>
+太陽と月が重なり合い、リングの縁に光の粒が連なる瞬間。リングが閉じる瞬間に光が生まれる。<br>
+それはまさに TTTの閉包原理 \(XYZ\cdot \hat{P}=1\) そのものです。<br>
+宇宙が閉じる時にビッグバンの光が生まれ、人がワインで繋がる時にBelly Beadsという飾りが生まれる。<br>
+宇宙論とワイナリーは、同じ物語でした。
+</div>
+
+<h2>1. 公理系の厳密化</h2>
+<div class="box">
+<b>定義：</b> π_c=3.14159…は定数、P̂=e^{iπ_c}· は位相反転演算子、X,Y,Zは四元数虚数単位 i,j,k に対応。<br>
+<b>公理1 (双極共役)：</b> X⊙Y=1, Y⊙Z=1, Z⊙X=1<br>
+<b>公理2 (非縮退)：</b> (X,Y,Z)≠(1,1,1)<br>
+<b>定理1：</b> XYZ=-1。証明：四元数 ijk=-1 そのもの。<br>
+<b>定理2 (位相閉包)：</b> P̂[XYZ]=1。旧表記 XYZπ=1 は XYZ·P̂=1 の略記。
+</div>
+<div class="formula">\(\boxed{XYZ=-1,\quad XYZ\cdot e^{i\pi_c}=1 \quad \text{ - リングが閉じる瞬間に光が生まれる}}\)</div>
+
+<h2>2. ビッグバン以前とひずみ δP≠0</h2>
+<p>6点ゼロ点 M₀={±X₀,±Y₀,±Z₀}。XYZ=-1 の捻れにより ΣO_k = δP≠0 が残る。これがひずみ。金環食で言えば、太陽と月が完全に重ならないわずかなズレがベイリーズビーズを生むように、6点のわずかなズレがビッグバンを生む。</p>
+
+<h2>3. 球の導出 x²+y²+z²=r²</h2>
+<p>振動の包絡線 r(t)=r₀exp(∫H dt) が膨張する位相球。ベイリーズビーズのリングが膨張していくように。</p>
+
+<h2>4. PベクトルとUVW回転座標</h2>
+<div class="box">
+P = x e_X + y e_Y + z e_Z + r q。qは単位四元数。<br>
+U=qXq⁻¹, V=qYq⁻¹, W=qZq⁻¹ が回転座標UVW。XYZは固定座標（太陽）、UVWは動的座標（月が回転して作るベイリーズビーズの位置）。
+</div>
+
+<h2>5. 125臨界 - 5の立方体が閉じる限界</h2>
+<table>
+<tr><th>k</th><th>N=6·3^k</th><th>n³</th><th>判定</th><th>ΔN</th><th>m/m0</th></tr>
+<tr><td>0</td><td>6</td><td>8</td><td>安定</td><td>0</td><td>0</td></tr>
+<tr><td>1</td><td>18</td><td>27</td><td>安定</td><td>0</td><td>0</td></tr>
+<tr><td>2</td><td>54</td><td>64</td><td>安定</td><td>0</td><td>0</td></tr>
+<tr class="hl"><td>3</td><td>162</td><td>125</td><td>臨界突破</td><td>37</td><td>0.228</td></tr>
+</table>
+<p>5³=125が最後の安定数。162-125=37が溢れる。溢れた37が私たちの物質。</p>
+
+<h2>6. エネルギー分配 68:27:5</h2>
+<div class="box">
+E_S∝r³, E_O∝r², E_M≈const。現在 r_nowで Es:Eo:Em=68:27:5が再現。宇宙というワインの成分比。
+</div>
+
+<h2>7. 37と137 - ベイリーズビーズの数</h2>
+<div class="formula">
+\(\frac{37}{137}=27.0\% \approx \Omega_{DM}\)<br>
+\(\frac{93}{137}=67.9\% \approx \Omega_{DE}\)<br>
+\(\frac{37}{162}=0.228 \approx \sin^2\theta_W\)<br>
+</div>
+
+<div class="box">
+<b>立方体の幾何学：</b><br>
+立方体には 12本の辺がある。<br>
+5² + 12 = 25+12 = <b>37 = 溢れ数</b><br>
+5³ + 12 = 125+12 = <b>137 = α⁻¹</b><br><br>
+\(\boxed{\alpha^{-1}=5^3+12,\quad \Delta N=5^2+12}\)<br><br>
+微細構造定数は、5の立方体が自分自身を閉じるために必要な辺のコスト。金環食のリングを閉じるために必要なベイリーズビーズの数。
+</div>
+
+<h2>8. 素粒子論への接続</h2>
+<p>m/m0=37/162=0.228 ≈ Weinberg角。N=6→18→54→162が3世代構造に対応。溢れた37が電弱混合角を決める。</p>
+
+<h2>9. 結論 - Belly Beadsとしての宇宙</h2>
+<div class="story">
+宇宙は、5の立方体が12本の辺で自分を閉じようとして溢れた37個の余白から生まれた位相球である。<br><br>
+金環食で、太陽と月が重なってリングの縁に光の粒が連なるように、<br>
+塩尻という日本のへその近くのおなかで、ワインで人が繋がってBelly Beadsという飾りが生まれるように、<br>
+宇宙もまた、XYZという3つの軸がP̂で閉じる時に、125という立方体から溢れた37個の光の粒として生まれた。<br><br>
+<b>Belly Beads Vineyard & Winery - 日本のおなかから、宇宙の閉包原理をワインに込めて。</b>
+</div>
+
+<div class="footer">
+TTT v2.2.1 Belly Beads Edition<br>
+川上真潔 / Belly Beads Vineyard & Winery, Shiojiri, Nagano, Japan - 日本のへその近くのおなかから<br>
+2026-07-19 / Baily's Beads → Belly Beads → Universe Beads<br>
+</div>
+
+</body>
+</html>

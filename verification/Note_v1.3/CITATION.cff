@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use this verification note or code, please cite it as below."
+title: "TTT Verification Note v1.3 — Golden-Ratio Solids as the Asymmetric Self-Referential Solution of the Hyperbolic-Zero Equation"
+version: "1.3"
+date-released: "2026-07-06"
+authors:
+  - family-names: "Kawakami"
+    given-names: "Naoyuki"
+    orcid: "https://orcid.org/0009-0009-2972-6511"
+    affiliation: "Team Shiojiri / Cooperate Craft Wine Makers"
+keywords:
+  - Platonic solids
+  - Tri-Tetra Theory
+  - machine verification
+  - sympy
+  - golden ratio
+  - dual polyhedra
+license: CC-BY-4.0
+references:
+  - type: report
+    title: "TTT v2.0"
+    doi: "10.5281/zenodo.19704117"
+  - type: report
+    title: "TTT_Verification_Note_v1.0"
+    doi: "10.5281/zenodo.21103588"
+  - type: report
+    title: "TTT_Verification_Note_v1.2"
+    doi: "TBD"

@@ -1,0 +1,45 @@
+{
+  "title": "TTT Verification Note v1.1 — Platonic Solids Supplement: Machine Verification of Center-Zero, Dual R/r Sharing, and Golden-Ratio Bipartition",
+  "description": "<p>Machine verification (Python/sympy, exact symbolic arithmetic) of three families of geometric facts about the five Platonic solids, as structural anchors for the Hyperbolic-Zero / Tri-Tetra Theory (TTT) fusion framework: (1) vertex-vector sum is exactly zero for all five solids (center-is-zero rule); (2) dual pairs share the circumradius-to-inradius ratio R/r exactly, and R/r decreases monotonically toward 1 (the sphere) along the vertex-count generation sequence 4 &rarr; 6/8 &rarr; 12/20; (3) the five solids are exactly bipartitioned into a &phi;-free group (4, 6, 8 vertices; all-rational coordinates) and a golden-ratio group (12, 20 vertices; &phi; exactly embedded). All Section-A results are classified [A] (machine-verified) under the author's proof-strength classification; interpretive readings are segregated as [C] working hypotheses. Supplement to TTT v2.0 (10.5281/zenodo.19704117) and TTT_Verification_Note_v1.0.</p>",
+  "creators": [
+    {
+      "name": "Kawakami, Naoyuki",
+      "affiliation": "Team Shiojiri / Cooperate Craft Wine Makers",
+      "orcid": "0009-0009-2972-6511"
+    }
+  ],
+  "upload_type": "publication",
+  "publication_type": "workingpaper",
+  "access_right": "open",
+  "license": "cc-by-4.0",
+  "keywords": [
+    "Platonic solids",
+    "Tri-Tetra Theory",
+    "TTT",
+    "hyperbolic zero",
+    "machine verification",
+    "sympy",
+    "exact arithmetic",
+    "golden ratio",
+    "dual polyhedra",
+    "circumradius inradius ratio",
+    "zero-sum center",
+    "open science"
+  ],
+  "language": "jpn",
+  "related_identifiers": [
+    {
+      "identifier": "10.5281/zenodo.19704117",
+      "relation": "isSupplementTo",
+      "resource_type": "publication-workingpaper",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5281/zenodo.21103588",
+      "relation": "isNewVersionOf",
+      "resource_type": "publication-workingpaper",
+      "scheme": "doi"
+    }
+  ],
+  "notes": "Reproduction: pip install sympy; python3 verify_platonic.py — all assertions pass, exit code 0. Code license: MIT."
+}

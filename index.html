@@ -332,11 +332,12 @@
     /* ── APPLICATIONS SECTION ── */
     .apps-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(3, 1fr);
       gap: 2rem;
       margin-top: 3rem;
     }
 
+    @media (max-width: 900px) { .apps-grid { grid-template-columns: 1fr 1fr; } }
     @media (max-width: 700px) { .apps-grid { grid-template-columns: 1fr; } }
 
     .app-card {
@@ -455,7 +456,7 @@
       <a class="btn" href="docs/theory_core.md">理論を読む</a>
       <a class="btn" href="app.html">▶ 検証ツールを開く</a>
       <a class="btn" href="docs/TTT_process_guide.md">使い方を見る</a>
-      <a class="btn ghost" href="https://github.com/kiki054-n/TTT" target="_blank">GitHub →</a>
+      <a class="btn ghost" href="https://github.com/kiki054-n/ttt" target="_blank">GitHub →</a>
     </div>
     <p class="scroll-hint">SCROLL</p>
   </header>
@@ -595,6 +596,30 @@
         </div>
         <span class="doc-arrow">→</span>
       </a>
+      <a class="doc-item" href="https://github.com/kiki054-n/ttt-fusion" target="_blank">
+        <div class="doc-info">
+          <p class="doc-tag">SUB-THEORY — 核融合物理</p>
+          <p class="doc-name">TTT-Fusion：00ポテンシャルと核融合</p>
+          <p class="doc-desc">波動干渉による正四面体節点形成・WKBトンネル確率増強</p>
+        </div>
+        <span class="doc-arrow">→</span>
+      </a>
+      <a class="doc-item" href="https://doi.org/10.5281/zenodo.19704117" target="_blank">
+        <div class="doc-info">
+          <p class="doc-tag">PUBLICATION — Zenodo</p>
+          <p class="doc-name">双極ゼロの理論（Theory of Bipolar Zero）</p>
+          <p class="doc-desc">DOI: 10.5281/zenodo.19704117 — CC BY 4.0</p>
+        </div>
+        <span class="doc-arrow">→</span>
+      </a>
+      <a class="doc-item" href="https://doi.org/10.5281/zenodo.20551789" target="_blank">
+        <div class="doc-info">
+          <p class="doc-tag">PUBLICATION — Zenodo</p>
+          <p class="doc-name">TTT-Fusion 理論論文（Preprint）</p>
+          <p class="doc-desc">DOI: 10.5281/zenodo.20551789 — CC BY-NC-SA 4.0</p>
+        </div>
+        <span class="doc-arrow">→</span>
+      </a>
     </div>
   </section>
 
@@ -621,6 +646,14 @@
         </p>
         <a class="app-link" href="docs/TTT論文構成設計書.md">設計書を読む →</a>
       </div>
+      <div class="app-card">
+        <p class="app-domain">NUCLEAR PHYSICS</p>
+        <p class="app-title">核融合：対称性駆動型制御</p>
+        <p class="app-body">
+          4方向位相同期波の正四面体干渉により、He-4 核子間距離に 00（双極ゼロ）ポテンシャル井戸を形成。WKB 近似でクーロン障壁のトンネル確率を指数関数的に増大させる。温度・圧力・閉じ込め時間とは独立した第4の制御変数「対称性」を提案。
+        </p>
+        <a class="app-link" href="https://doi.org/10.5281/zenodo.20551789" target="_blank">論文を読む（Zenodo）→</a>
+      </div>
     </div>
   </section>
 
@@ -629,13 +662,15 @@
   <!-- ── FOOTER ── -->
   <footer>
     <div class="footer-left">
-      TriTetra Theory (TTT) &nbsp;/&nbsp; 2026
+      TriTetra Theory (TTT) &nbsp;/&nbsp; 川上真潔（かわかみ なおゆき）&nbsp;/&nbsp; 2026
     </div>
     <div class="footer-right">
       <a href="README.md">README</a>
       <a href="docs/theory_core.md">Theory</a>
       <a href="foundations/README.md">Foundations</a>
-      <a href="https://github.com/kiki054-n/TTT" target="_blank">GitHub</a>
+      <a href="https://github.com/kiki054-n/ttt-fusion" target="_blank">TTT-Fusion</a>
+      <a href="https://doi.org/10.5281/zenodo.20551789" target="_blank">Zenodo</a>
+      <a href="https://github.com/kiki054-n/ttt" target="_blank">GitHub</a>
     </div>
   </footer>
 

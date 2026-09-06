@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>幾何学に基づく宇宙創成シミュレーション</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Three.js とコントロール、アニメーション用のGSAPを読み込む -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <style>
+    body { margin: 0; overflow: hidden; background-color: #050505; color: #fff; font-family: 'Helvetica Neue', Arial, sans-serif; }
+    #canvas-container { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; cursor: grab; }
+    #canvas-container:active { cursor: grabbing; }
+    #ui-container { position: absolute; bottom: 2rem; right: 2rem; z-index: 10; pointer-events: none; }
+    .pointer-events-auto { pointer-events: auto; }
+    .glass-panel { background: rgba(15, 15, 15, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; padding: 1.5rem; width: 380px; max-width: 90vw; pointer-events: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+  </style>
+</head>
+<body>
+  <div id="canvas-container"></div>
+  
+  <div id="ui-container">
+    <div class="glass-panel">
+      <h2 id="formula-display" class="text-lg md:text-xl font-mono text-blue-300 mb-2 h-6"></h2>
+      <p id="step-text" class="text-base md:text-lg mb-6 text-gray-200 min-h-[3rem] transition-opacity duration-300">
+        空間は「無」の状態です。<br>（画面をドラッグして視点を変えられます）
+      </p>
+      <div class="flex justify-center space-x-4 pointer-events-auto">
+        <button id="prev-btn" class="px-5 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-full font-semibold transition disabled:opacity-30 disabled:cursor-not-allowed">戻る</button>
+        <button id="next-btn" class="px-8 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-semibold shadow-lg shadow-blue-500/30 transition disabled:opacity-30 disabled:cursor-not-allowed">次へ進む</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.onload = function () {
+      // --- 1. Three.js の基本セットアップ ---
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+      camera.position.set(6, 4, 8); 
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+      const controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.autoRotate = false; // 基本軸を完全に固定
+
+      // --- 2. オブジェクトの生成 ---
+      const radius = 2.5; 
+      
+      // 背景の星空
+      const starsGeometry = new THREE.BufferGeometry();
+      const starsCount = 2000;
+      const posArray = new Float32Array(starsCount * 3);
+      for(let i = 0; i < starsCount * 3; i++) {
+        posArray[i] = (Math.random() - 0.5) * 30; 
+      }
+      starsGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+      const starsMat = new THREE.PointsMaterial({ size: 0.03, color: 0xffffff, transparent: true, opacity: 0 });
+      const starsMesh = new THREE.Points(starsGeometry, starsMat);
+      scene.add(starsMesh);
+
+      // XYZの基準軸（固定）
+      const axisMatX = new THREE.LineBasicMaterial({ color: 0xff5555, transparent: true, opacity: 0 });
+      const axisMatY = new THREE.LineBasicMaterial({ color: 0x55ff55, transparent: true, opacity: 0 });
+      const axisMatZ = new THREE.LineBasicMaterial({ color: 0x55aaee, transparent: true, opacity: 0 });
+      
+      const lineX = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-5,0,0), new THREE.Vector3(5,0,0)]), axisMatX);
+      const lineY = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,-5,0), new THREE.Vector3(0,5,0)]), axisMatY);
+      const lineZ = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,-5), new THREE.Vector3(0,0,5)]), axisMatZ);
+      scene.add(lineX, lineY, lineZ);
+
+      // ★ 右システム (X=1) のグループ化 ★
+      const groupR = new THREE.Group();
+      groupR.position.set(radius, 0, 0); // x=1を中心とする
+      scene.add(groupR);
+      
+      const ringR_G = new THREE.Group(); // 緑リング用
+      const ringR_B = new THREE.Group(); // 青リング用
+      const ringR_R = new THREE.Group(); // 赤リング用 (NEW)
+      groupR.add(ringR_G, ringR_B, ringR_R);
+
+      // ★ 左システム (X=-1) のグループ化 ★
+      const groupL = new THREE.Group();
+      groupL.position.set(-radius, 0, 0); // x=-1を中心とする
+      scene.add(groupL);
+
+      const ringL_G = new THREE.Group(); // 緑リング用
+      const ringL_B = new THREE.Group(); // 青リング用
+      const ringL_R = new THREE.Group(); // 赤リング用 (NEW)
+      groupL.add(ringL_G, ringL_B, ringL_R);
+
+      // 共通のマテリアルとジオメトリ
+      const pointGeo = new THREE.SphereGeometry(0.15, 32, 32);
+      const centerGeo = new THREE.SphereGeometry(0.08, 16, 16);
+      
+      const centerMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0 });
+      const matR = new THREE.MeshBasicMaterial({ color: 0xff5555, transparent: true, opacity: 0 });
+      const matG = new THREE.MeshBasicMaterial({ color: 0x55ff55, transparent: true, opacity: 0 });
+      const matB = new THREE.MeshBasicMaterial({ color: 0x55aaee, transparent: true, opacity: 0 });
+
+      // 中心点 (固定)
+      const centerR = new THREE.Mesh(centerGeo, centerMat); centerR.position.set(radius, 0, 0);
+      const centerL = new THREE.Mesh(centerGeo, centerMat); centerL.position.set(-radius, 0, 0);
+      scene.add(centerR, centerL);
+
+      // 赤い点をそれぞれの赤リンググループに追加 (ローカル座標化)
+      const pR1 = new THREE.Mesh(pointGeo, matR); ringR_R.add(pR1);
+      const pL1 = new THREE.Mesh(pointGeo, matR); ringL_R.add(pL1);
+
+      // 緑の点と青の点を、それぞれのリンググループに追加
+      const pR2 = new THREE.Mesh(pointGeo, matG); ringR_G.add(pR2);
+      const pR3 = new THREE.Mesh(pointGeo, matB); ringR_B.add(pR3);
+      
+      const pL2 = new THREE.Mesh(pointGeo, matG); ringL_G.add(pL2);
+      const pL3 = new THREE.Mesh(pointGeo, matB); ringL_B.add(pL3);
+
+      // 軌跡の描画 (ローカル座標 0,0,0 を中心とする円)
+      function createLocalOrbitLine(r, color) {
+        const pts = [];
+        for(let i = 0; i <= 64; i++) {
+            const theta = (i / 64) * Math.PI * 2;
+            pts.push(new THREE.Vector3(0, r * Math.cos(theta), r * Math.sin(theta)));
+        }
+        const mat = new THREE.LineBasicMaterial({ color: color, transparent: true, opacity: 0 });
+        const line = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), mat);
+        return { line, mat };
+      }
+      
+      const orbitR_G = createLocalOrbitLine(radius, 0x55ff55); ringR_G.add(orbitR_G.line);
+      const orbitR_B = createLocalOrbitLine(radius, 0x55aaee); ringR_B.add(orbitR_B.line);
+      const orbitL_G = createLocalOrbitLine(radius, 0x55ff55); ringL_G.add(orbitL_G.line);
+      const orbitL_B = createLocalOrbitLine(radius, 0x55aaee); ringL_B.add(orbitL_B.line);
+
+      // 赤い点用のY軸回転軌道 (XZ平面の円)
+      function createYAxisOrbitLine(r, color) {
+        const pts = [];
+        for(let i = 0; i <= 64; i++) {
+            const theta = (i / 64) * Math.PI * 2;
+            pts.push(new THREE.Vector3(r * Math.cos(theta), 0, r * Math.sin(theta)));
+        }
+        const mat = new THREE.LineBasicMaterial({ color: color, transparent: true, opacity: 0 });
+        const line = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), mat);
+        return { line, mat };
+      }
+      
+      const orbitR_R = createYAxisOrbitLine(radius, 0xff5555); ringR_R.add(orbitR_R.line);
+      const orbitL_R = createYAxisOrbitLine(radius, 0xff5555); ringL_R.add(orbitL_R.line);
+
+      const allOrbitMats = [orbitR_G.mat, orbitL_G.mat, orbitR_B.mat, orbitL_B.mat, orbitR_R.mat, orbitL_R.mat];
+
+      // --- 3. ステート管理とUIロジック ---
+      let currentState = 0;
+      let isAnimating = false; 
+      let isMultiAxisRotating = false; 
+      let isAccelerating = false; 
+      let speedMultiplier = 1;    
+      let animationTime = 0;
+      let collisionTime = 0; 
+
+      const stepTextEl = document.getElementById('step-text');
+      const formulaEl = document.getElementById('formula-display');
+      const prevBtn = document.getElementById('prev-btn');
+      const nextBtn = document.getElementById('next-btn');
+
+      const states = [
+        {
+          formula: "",
+          text: "空間は「無」の状態です。<br>（画面をドラッグして視点を変えられます）",
+          action: () => {
+            gsap.to([axisMatX, axisMatY, axisMatZ], { opacity: 0, duration: 1 });
+            isAnimating = false;
+            isMultiAxisRotating = false;
+          }
+        },
+        {
+          formula: "幾何学空間の定義",
+          text: "XYZ軸の空間が現れます。これが全ての舞台です。",
+          action: () => {
+            gsap.to([axisMatX, axisMatY, axisMatZ], { opacity: 0.3, duration: 1.5 });
+            gsap.to(centerMat, { opacity: 0, duration: 1 });
+            isAnimating = false;
+            isMultiAxisRotating = false;
+          }
+        },
+        {
+          formula: "XY = 1",
+          text: "数式により、X軸の＋と－の位置に2つの「中心」が現れました。",
+          action: () => {
+            gsap.to(centerMat, { opacity: 0.8, duration: 1.5 });
+            gsap.to([matR, matG, matB], { opacity: 0, duration: 1 });
+            isAnimating = false;
+            isMultiAxisRotating = false;
+          }
+        },
+        {
+          formula: "XY = 1,  XYZ = -1",
+          text: "指定された初期座標の配置に戻りました。<br>（XY平面、XZ平面にそれぞれ点が配置されます）",
+          action: () => {
+            gsap.to([matR, matG, matB], { opacity: 1, duration: 1.5 });
+            gsap.to(allOrbitMats.concat(starsMat), { opacity: 0, duration: 1 });
+            isAnimating = false;
+            isMultiAxisRotating = false;
+            animationTime = 0; 
+            collisionTime = 0;
+            
+            const r = radius;
+            // ローカル座標での初期配置
+            pR1.position.set(0, 0, 0); 
+            pL1.position.set(0, 0, 0); 
+            
+            pR2.position.set(0, r, 0); 
+            pR3.position.set(0, 0, -r); 
+            pL2.position.set(0, -r, 0); 
+            pL3.position.set(0, 0, r); 
+          }
+        },
+        {
+          formula: "XY = 1,  XYZ = -1,  XYZπ = 1",
+          text: "「π」の要素が加わり、空間が回転を始めます。<br>中心を軸として、緑と青の2点が円軌道を描きます。",
+          action: () => {
+            gsap.to([orbitR_G.mat, orbitL_G.mat, orbitR_B.mat, orbitL_B.mat], { opacity: 0.3, duration: 2 });
+            gsap.to([orbitR_R.mat, orbitL_R.mat], { opacity: 0, duration: 1 });
+            gsap.to(starsMat, { opacity: 0.6, duration: 3 }); 
+            isAnimating = true;
+            isMultiAxisRotating = false;
+          }
+        },
+        {
+          formula: "2つの球の形成",
+          text: "緑リングはY軸で、青リングはZ軸で独立して回転を始めます。<br>軌道が交差し、x=1 と x=-1 の位置に2つの「球」が現れます。",
+          action: () => {
+            gsap.to([orbitR_G.mat, orbitL_G.mat, orbitR_B.mat, orbitL_B.mat], { opacity: 0.6, duration: 1 });
+            gsap.to([orbitR_R.mat, orbitL_R.mat], { opacity: 0, duration: 1 });
+            isAnimating = true;
+            isMultiAxisRotating = true; // 各リングの回転をON
+          }
+        },
+        {
+          formula: "第3のリングの形成",
+          text: "X軸上の点(赤)が広がり、第3の赤いリングを形成します。<br>そしてこの赤いリングは、X軸を軸として回転を始めます。",
+          action: () => {
+            gsap.to([orbitR_R.mat, orbitL_R.mat], { opacity: 0.4, duration: 2 });
+            isAnimating = true;
+            isMultiAxisRotating = true;
+          }
+        },
+        {
+          formula: "時間の加速と球の完成",
+          text: "速度が上がりきり、緑(Y軸)・青(Z軸)・赤(X軸)の3つのリングが激しく回転します。<br>すべての軸が補完し合い、完璧な2つの球体が空間に完成します。",
+          action: () => {
+            isAnimating = true;
+            isMultiAxisRotating = true;
+            isAccelerating = true; // 加速をON
+          }
+        }
+      ];
+
+      function updateUI() {
+        stepTextEl.style.opacity = 0;
+        isAccelerating = false; // ステップ変更時に一旦加速をリセット
+        setTimeout(() => {
+          formulaEl.innerText = states[currentState].formula;
+          stepTextEl.innerHTML = states[currentState].text;
+          stepTextEl.style.opacity = 1;
+        }, 300);
+
+        states[currentState].action();
+
+        prevBtn.disabled = currentState === 0;
+        nextBtn.disabled = currentState === states.length - 1;
+      }
+
+      nextBtn.addEventListener('click', () => {
+        if (currentState < states.length - 1) {
+          currentState++;
+          updateUI();
+        }
+      });
+
+      prevBtn.addEventListener('click', () => {
+        if (currentState > 0) {
+          currentState--;
+          updateUI();
+        }
+      });
+
+      updateUI();
+
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+
+      // --- 4. アニメーションループ ---
+      function animate() {
+        requestAnimationFrame(animate);
+        
+        controls.update();
+
+        // 加速フラグによる速度倍率の計算
+        if (isAccelerating) {
+          speedMultiplier += 0.005; // 毎フレーム徐々に加速
+          if (speedMultiplier > 15) speedMultiplier = 15; // 速度の上限（MAX）
+        } else {
+          speedMultiplier += (1 - speedMultiplier) * 0.1; // 滑らかに元の速度(1)に戻る
+        }
+
+        if (isAnimating) {
+          animationTime += 0.02 * speedMultiplier; 
+          const r = radius;
+          const aT = animationTime;
+          
+          if (currentState === 4 || currentState === 5) {
+            // ステップ4, 5: 赤点はローカルの中心(0,0,0)に固定
+            pR1.position.set(0, 0, 0);
+            pL1.position.set(0, 0, 0);
+          } else if (currentState >= 6) {
+            // ステップ6, 7: 赤点が円軌道（XZ平面）へと広がる
+            collisionTime += 0.015 * speedMultiplier; 
+            
+            // 軌道半径を 0 から r へと徐々に広げる
+            const blend = Math.min(1, collisionTime / 3.0); 
+            const activeR = r * blend;
+            
+            // ローカル座標での円運動 (-sin, cosで軌道上の位置を計算)
+            pR1.position.set(
+              -activeR * Math.sin(collisionTime), 
+              0, 
+              activeR * Math.cos(collisionTime)
+            );
+            
+            pL1.position.set(
+              activeR * Math.sin(collisionTime), 
+              0, 
+              -activeR * Math.cos(collisionTime)
+            );
+          }
+
+          if (currentState >= 4) {
+            // 緑・青の点はローカル座標（リングの中心）を基準に円軌道を描く
+            pR2.position.set(0, r * Math.cos(aT), r * Math.sin(aT));
+            pR3.position.set(0, r * Math.sin(aT), -r * Math.cos(aT));
+            
+            pL2.position.set(0, -r * Math.cos(aT), -r * Math.sin(aT));
+            pL3.position.set(0, -r * Math.sin(aT), r * Math.cos(aT));
+          }
+
+          // ★ 3つのリングの独立回転により 完璧な2つの球 を形成 ★
+          if (isMultiAxisRotating) {
+            // 緑リングは Y軸回転
+            ringR_G.rotation.y += 0.02 * speedMultiplier;
+            ringL_G.rotation.y += 0.02 * speedMultiplier;
+            
+            // 青リングは Z軸回転
+            ringR_B.rotation.z += 0.02 * speedMultiplier;
+            ringL_B.rotation.z += 0.02 * speedMultiplier;
+
+            if (currentState >= 6) {
+              // 赤リングは X軸回転
+              ringR_R.rotation.x += 0.02 * speedMultiplier;
+              ringL_R.rotation.x += 0.02 * speedMultiplier;
+            }
+
+          } else {
+            // 回転を止める時は元の角度へ滑らかに戻る
+            ringR_G.quaternion.slerp(new THREE.Quaternion(), 0.05);
+            ringL_G.quaternion.slerp(new THREE.Quaternion(), 0.05);
+            ringR_B.quaternion.slerp(new THREE.Quaternion(), 0.05);
+            ringL_B.quaternion.slerp(new THREE.Quaternion(), 0.05);
+            ringR_R.quaternion.slerp(new THREE.Quaternion(), 0.05);
+            ringL_R.quaternion.slerp(new THREE.Quaternion(), 0.05);
+          }
+        }
+        
+        renderer.render(scene, camera);
+      }
+      
+      animate(); 
+    };
+  </script>
+</body>
+</html>
