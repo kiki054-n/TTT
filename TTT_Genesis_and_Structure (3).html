@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tri-Tetra Theory (OOπ) — 創生論・格子収縮・原子の形成</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f5f0;
+  --surface: #ffffff;
+  --ink: #1a1f2e;
+  --muted: #5a6270;
+  --accent: #2d5a5a;
+  --accent-weak: color-mix(in oklab, var(--accent) 10%, var(--surface));
+  --genesis: #4a3a5c;
+  --genesis-weak: color-mix(in oklab, var(--genesis) 10%, var(--surface));
+  --birth: #5a3a2d;
+  --birth-weak: color-mix(in oklab, var(--birth) 10%, var(--surface));
+  --cosmos: #2d4a5a;
+  --cosmos-weak: color-mix(in oklab, var(--cosmos) 10%, var(--surface));
+  --admitted: #2d5a5a;
+  --rejected: #8b3a3a;
+  --open: #6b5b3a;
+  --line: color-mix(in oklab, var(--ink) 10%, transparent);
+  --step--1: clamp(0.85rem, 0.82rem + 0.15vw, 0.95rem);
+  --step-0: clamp(0.95rem, 0.92rem + 0.2vw, 1.05rem);
+  --step-1: clamp(1.15rem, 1.05rem + 0.5vw, 1.4rem);
+  --step-2: clamp(1.4rem, 1.2rem + 1vw, 2rem);
+  --step-3: clamp(1.8rem, 1.4rem + 2vw, 2.8rem);
+  --space: clamp(1.2rem, 1rem + 1vw, 2rem);
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 20px -10px rgba(0,0,0,0.12);
+}
+
+* { box-sizing: border-box; margin: 0; }
+
+body {
+  font-family: "Inter", "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.75;
+  font-size: var(--step-0);
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: calc(var(--space)*2) var(--space);
+}
+
+header {
+  text-align: center;
+  margin-bottom: calc(var(--space)*2.5);
+  padding-bottom: calc(var(--space)*1.5);
+  border-bottom: 1px solid var(--line);
+}
+
+header .meta {
+  font-size: var(--step--1);
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+}
+
+h1 {
+  font-family: "Crimson Pro", "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+  font-size: var(--step-3);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+header .subtitle {
+  font-family: "Crimson Pro", "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+  font-size: var(--step-1);
+  color: var(--muted);
+  font-style: italic;
+  margin-top: 0.5rem;
+  line-height: 1.4;
+}
+
+h2 {
+  font-family: "Crimson Pro", "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+  font-size: var(--step-2);
+  font-weight: 600;
+  margin-top: calc(var(--space)*2);
+  margin-bottom: var(--space);
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid var(--accent);
+  display: inline-block;
+}
+
+h2.genesis-h2 { border-bottom-color: var(--genesis); color: var(--genesis); }
+h2.birth-h2 { border-bottom-color: var(--birth); color: var(--birth); }
+h2.cosmos-h2 { border-bottom-color: var(--cosmos); color: var(--cosmos); }
+
+h3 {
+  font-family: "Crimson Pro", "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+  font-size: var(--step-1);
+  font-weight: 600;
+  margin-top: calc(var(--space)*1.5);
+  margin-bottom: calc(var(--space)*0.6);
+  color: var(--accent);
+}
+
+p {
+  margin-bottom: calc(var(--space)*0.9);
+  text-align: justify;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+
+.lead {
+  font-size: var(--step-1);
+  line-height: 1.6;
+  color: var(--ink);
+  margin-bottom: calc(var(--space)*1.5);
+  padding: calc(var(--space)*1.2);
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border-left: 4px solid var(--accent);
+}
+
+.lead.genesis-lead { border-left-color: var(--genesis); background: var(--genesis-weak); }
+.lead.cosmos-lead { border-left-color: var(--cosmos); background: var(--cosmos-weak); }
+
+section { margin-bottom: calc(var(--space)*2); }
+
+.claim {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: calc(var(--space)*1.1);
+  margin-bottom: calc(var(--space)*1.2);
+  box-shadow: var(--shadow);
+  border-left: 5px solid var(--line);
+  position: relative;
+}
+
+.claim.admitted { border-left-color: var(--admitted); }
+.claim.rejected { border-left-color: var(--rejected); }
+.claim.open { border-left-color: var(--open); }
+.claim.genesis { border-left-color: var(--genesis); background: var(--genesis-weak); }
+.claim.birth { border-left-color: var(--birth); background: var(--birth-weak); }
+.claim.cosmos { border-left-color: var(--cosmos); background: var(--cosmos-weak); }
+
+.claim-label {
+  display: inline-block;
+  font-size: var(--step--1);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.15em 0.7em;
+  border-radius: 4px;
+  margin-bottom: 0.6rem;
+}
+
+.claim.admitted .claim-label { background: color-mix(in oklab, var(--admitted) 12%, transparent); color: var(--admitted); }
+.claim.rejected .claim-label { background: color-mix(in oklab, var(--rejected) 12%, transparent); color: var(--rejected); }
+.claim.open .claim-label { background: color-mix(in oklab, var(--open) 12%, transparent); color: var(--open); }
+.claim.genesis .claim-label { background: color-mix(in oklab, var(--genesis) 15%, transparent); color: var(--genesis); }
+.claim.birth .claim-label { background: color-mix(in oklab, var(--birth) 15%, transparent); color: var(--birth); }
+.claim.cosmos .claim-label { background: color-mix(in oklab, var(--cosmos) 15%, transparent); color: var(--cosmos); }
+
+.claim-title {
+  font-family: "Crimson Pro", "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+  font-size: var(--step-1);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.claim p:last-child { margin-bottom: 0; }
+
+.genesis-box, .birth-box, .cosmos-box {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: calc(var(--space)*1.3);
+  margin: calc(var(--space)*1.5) 0;
+  box-shadow: var(--shadow);
+}
+
+.genesis-box { border: 1px solid color-mix(in oklab, var(--genesis) 20%, transparent); }
+.birth-box { border: 1px solid color-mix(in oklab, var(--birth) 20%, transparent); }
+.cosmos-box { border: 1px solid color-mix(in oklab, var(--cosmos) 20%, transparent); }
+
+.step {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: calc(var(--space)*0.9);
+  align-items: flex-start;
+}
+
+.step:last-child { margin-bottom: 0; }
+
+.step-num {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: var(--step--1);
+  font-family: "Crimson Pro", serif;
+  margin-top: 0.1rem;
+}
+
+.genesis-box .step-num { background: var(--genesis); }
+.birth-box .step-num { background: var(--birth); }
+.cosmos-box .step-num { background: var(--cosmos); }
+
+.step-body { flex: 1; }
+
+.step-title {
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+  font-size: var(--step-0);
+}
+
+.genesis-box .step-title { color: var(--genesis); }
+.birth-box .step-title { color: var(--birth); }
+.cosmos-box .step-title { color: var(--cosmos); }
+
+.equation {
+  font-family: "Crimson Pro", "Times New Roman", serif;
+  font-size: 1.15em;
+  font-style: italic;
+  text-align: center;
+  padding: calc(var(--space)*0.8);
+  background: var(--bg);
+  border-radius: var(--radius);
+  margin: calc(var(--space)*0.8) 0;
+  letter-spacing: 0.03em;
+}
+
+.badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: calc(var(--space)*1.2) 0;
+}
+
+.badge {
+  font-size: var(--step--1);
+  padding: 0.35em 0.9em;
+  border-radius: 100px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.badge strong { color: var(--ink); }
+
+.repro {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: calc(var(--space)*0.9);
+  margin-top: calc(var(--space)*2);
+  font-size: var(--step--1);
+  color: var(--muted);
+}
+
+.repro code {
+  background: var(--bg);
+  padding: 0.2em 0.5em;
+  border-radius: 4px;
+  font-family: "SF Mono", "Consolas", monospace;
+  font-size: 0.9em;
+  color: var(--ink);
+}
+
+footer {
+  margin-top: calc(var(--space)*3);
+  padding-top: var(--space);
+  border-top: 1px solid var(--line);
+  font-size: var(--step--1);
+  color: var(--muted);
+  text-align: center;
+}
+
+.math {
+  font-family: "Crimson Pro", "Times New Roman", serif;
+  font-style: italic;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin: calc(var(--space)*1.2) 0;
+}
+
+.field-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: calc(var(--space)*0.8);
+  border: 1px solid var(--line);
+  text-align: center;
+}
+
+.field-card .field-symbol {
+  font-family: "Crimson Pro", serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.3rem;
+}
+
+.field-card .field-name {
+  font-size: var(--step--1);
+  color: var(--muted);
+}
+
+.motion-box {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: calc(var(--space)*1.2);
+  margin: calc(var(--space)*1.2) 0;
+  box-shadow: var(--shadow);
+  border-left: 5px solid var(--accent);
+}
+
+.motion-box .motion-title {
+  font-family: "Crimson Pro", serif;
+  font-weight: 600;
+  font-size: var(--step-1);
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+
+.motion-item {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: calc(var(--space)*0.7);
+  align-items: flex-start;
+}
+
+.motion-item:last-child { margin-bottom: 0; }
+
+.motion-icon {
+  flex-shrink: 0;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: var(--step--1);
+  font-family: "Crimson Pro", serif;
+  margin-top: 0.05rem;
+}
+
+.motion-body { flex: 1; }
+
+/* Lattice table */
+.lattice-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: calc(var(--space)*1) 0;
+  font-size: var(--step--1);
+}
+
+.lattice-table th, .lattice-table td {
+  border: 1px solid var(--line);
+  padding: 0.6em 0.8em;
+  text-align: center;
+}
+
+.lattice-table th {
+  background: var(--bg);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.lattice-table td.highlight {
+  background: color-mix(in oklab, var(--cosmos) 8%, transparent);
+  font-weight: 600;
+}
+
+.lattice-table td.key-cell {
+  background: color-mix(in oklab, var(--birth) 10%, transparent);
+  font-weight: 600;
+}
+
+.highlight-box {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: calc(var(--space)*1);
+  margin: calc(var(--space)*1) 0;
+  border: 2px solid color-mix(in oklab, var(--cosmos) 25%, transparent);
+  text-align: center;
+}
+
+.highlight-box .hl-number {
+  font-family: "Crimson Pro", serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--cosmos);
+}
+
+.highlight-box .hl-label {
+  font-size: var(--step--1);
+  color: var(--muted);
+  margin-top: 0.3rem;
+}
+
+@media (max-width: 520px) {
+  .field-grid { grid-template-columns: 1fr; }
+  .lattice-table { font-size: 0.8rem; }
+  .lattice-table th, .lattice-table td { padding: 0.4em 0.3em; }
+}
+
+@media print {
+  body { background: #fff; }
+  .claim, .genesis-box, .birth-box, .cosmos-box, .motion-box { break-inside: avoid; }
+  header { page-break-after: avoid; }
+}
+
+@page {
+  size: A4;
+  margin: 18mm;
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="meta">Tri-Tetra Theory (OOπ) — 全体構造メモ</div>
+  <h1>創生論・格子収縮・原子の形成</h1>
+  <div class="subtitle">双極場・FBI・ひずみ・運動の起源・次の誕生・光子枠と球の増加・格子収縮・OOπO・XYZπ＝1・OOOπ＝1</div>
+</header>
+
+<section>
+  <div class="lead genesis-lead">
+    この宇宙には、<strong>双極の場</strong>があった。そこに力学場F、磁気場B、電磁場Iあった。<strong>4つの場の関係の場</strong>があった。<strong>ひずみが起きたときから</strong>、宇宙は始まった。
+  </div>
+</section>
+
+<section>
+  <h2 class="genesis-h2">創生論（Genesis）</h2>
+
+  <div class="genesis-box">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">原初の双極場</div>
+        <p>何もない世界に、双極の場が存在した。これは原点（0）を持たない純粋な関係性であり、<span class="math">XY = 1</span> として表される。X と Y は分離しているようでいて、互いの逆数として結合している。</p>
+        <div class="equation">XY = 1</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">4つの場の関係の場</div>
+        <p>双極場に加え、力学場F、磁気場B、電磁場Iが存在した。これら4つの場が互いに関係を持つ「関係の場」が、OOπ の第2のOに相当する。</p>
+        <div class="field-grid">
+          <div class="field-card">
+            <div class="field-symbol">XY</div>
+            <div class="field-name">双極場（Dipole Field）</div>
+          </div>
+          <div class="field-card">
+            <div class="field-symbol">F</div>
+            <div class="field-name">力学場（Force Field）</div>
+          </div>
+          <div class="field-card">
+            <div class="field-symbol">B</div>
+            <div class="field-name">磁気場（Magnetic Field）</div>
+          </div>
+          <div class="field-card">
+            <div class="field-symbol">I</div>
+            <div class="field-name">電磁場（Electromagnetic Field）</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">ひずみの発生</div>
+        <p>指先のFBIの先に「0」はないが、<strong>存在</strong>はあった。ひずみがこの場を＋と−に動かした。左手（フレミング左手の法則）は<strong>上＋</strong>方向に、右手（ダイナモ法則）は<strong>下−</strong>方向に、歪みが進行した。</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">運動の始まり</div>
+        <p><strong>Fは単振動を始めた。BとIは円運動を始めた。</strong>これらの運動は止まらなかった。相互に作用し続け、やがて<strong>光速まで運動をした</strong>。</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <div class="step-title">光速到達と行き場の消失</div>
+        <p>エネルギーは増え続け、光速に達した。しかし光速に達すると、<strong>行き場がなくなった</strong>。運動はそれ以上加速できず、双極の場に蓄積されたエネルギーが臨界点に達した。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 class="birth-h2">次の誕生（The Next Birth）</h2>
+
+  <div class="birth-box">
+    <div class="step">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <div class="step-title">上下の双極の場から次の誕生</div>
+        <p>光速到達により行き場を失ったエネルギーは、<strong>上下の双極の場</strong>から新たな構造を生み出した。これが「次の誕生」である。双極の関係そのものが、数として顕在化した。</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">7</div>
+      <div class="step-body">
+        <div class="step-title">双極の関係で2が現れる</div>
+        <p>双極の場 XY = 1 は、もともとXとYの2極を持つ。光速到達・行き場消失という臨界条件下で、この<strong>双極の関係そののが「2」として顕在化</strong>した。2は単なる数ではなく、双極構造の代数的表出である。</p>
+        <div class="equation">双極の関係 → 2</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">8</div>
+      <div class="step-body">
+        <div class="step-title">総数は6になる</div>
+        <p>双極の関係から現れた「2」と、原初の4つの場（XY, F, B, I）が合わさり<strong>総数は6</strong>となった。この6は、創生後の宇宙構造の基本数として機能する。</p>
+        <div class="equation">4（場） + 2（双極の顕在化） = 6</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 class="cosmos-h2">宇宙の展開：光子枠と球の増加</h2>
+
+  <div class="lead cosmos-lead">
+    <strong>6, 18, 54, 162</strong> 球（玉）は増加する。一方、XYZの光子枠は <strong>1×1×1, 2×2×2, 3×3×3, 4×4×4, 5×5×5</strong> と増えた。125のマスに162の球が増え、<strong>37の球が125に入る</strong>ことになる。
+  </div>
+
+  <div class="cosmos-box">
+    <div class="step">
+      <div class="step-num">9</div>
+      <div class="step-body">
+        <div class="step-title">球の幾何級数的増加</div>
+        <p>創生後、球（粒子・エネルギー量子）は3倍ずつ増加していく。<strong>6 → 18 → 54 → 162</strong>。これは双極の場のひずみが3次的に伝播する幾何学的必然性を反映している。</p>
+        <div class="equation">6 × 3 = 18 → 18 × 3 = 54 → 54 × 3 = 162</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">10</div>
+      <div class="step-body">
+        <div class="step-title">光子枠の立方増加</div>
+        <p>一方、XYZの光子枠は空間的に立方体的に拡張する。<strong>n×n×n = n³</strong> の形で成長し、1³=1, 2³=8, 3³=27, 4³=64, 5³=125 と増加していく。</p>
+        <table class="lattice-table">
+          <tr><th>n</th><th>光子枠 n³</th><th>球の数</th><th>関係</th></tr>
+          <tr><td>1</td><td>1</td><td>—</td><td>—</td></tr>
+          <tr><td>2</td><td>8</td><td>—</td><td>—</td></tr>
+          <tr><td>3</td><td>27</td><td>—</td><td>—</td></tr>
+          <tr><td>4</td><td>64</td><td>—</td><td>—</td></tr>
+          <tr class="highlight"><td>5</td><td class="highlight">125</td><td class="key-cell">162</td><td class="key-cell">162 − 125 = 37</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">11</div>
+      <div class="step-body">
+        <div class="step-title">37の球の収縮</div>
+        <p>5×5×5 = 125 の光子枠に対して、162 の球が存在すると、<strong>37の球が枠に入りきれない</strong>。この37の球は、空間的に小さくならざるを得ない。<strong>質等（質量の等価性）によって体積を減らしていく</strong>。これが粒子の圧縮・質量獲得の起源である。</p>
+        <div class="highlight-box">
+          <div class="hl-number">162 − 125 = 37</div>
+          <div class="hl-label">37の過剰球が質等により収縮</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 class="cosmos-h2">格子収縮と原子の基の形成</h2>
+
+  <div class="cosmos-box">
+    <div class="step">
+      <div class="step-num">12</div>
+      <div class="step-body">
+        <div class="step-title">格子による体積収縮</div>
+        <p>37の過剰球は、格子の形成とともにさらに体積を収縮していく。<strong>6×6×6, 7×7×7, 8×8×8, 9×9×9, 10×10×10</strong> の各段階で、収縮圧力により格子形成粒子が生成され、原子の基礎構造が形成されていった。</p>
+        <table class="lattice-table">
+          <tr><th>格子</th><th>体積</th><th>段階</th></tr>
+          <tr><td>6×6×6</td><td>216</td><td>収縮開始</td></tr>
+          <tr><td>7×7×7</td><td>343</td><td>格子形成</td></tr>
+          <tr><td>8×8×8</td><td>512</td><td>構造安定化</td></tr>
+          <tr><td>9×9×9</td><td>729</td><td>複合構造</td></tr>
+          <tr class="highlight"><td>10×10×10</td><td class="highlight">1000</td><td class="highlight">原子の基完成</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">13</div>
+      <div class="step-body">
+        <div class="step-title">収縮圧力による格子形成粒子</div>
+        <p>各段階の収縮圧力により、<strong>格子形成の粒子</strong>が次々と生成される。これらの粒子は、後の素粒子構造と原子構造の中間的な存在として機能し、原子の「基」（基礎的構造単位）を形成していく。</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">14</div>
+      <div class="step-body">
+        <div class="step-title">OOπO の誕生</div>
+        <p>双極の場のひずみから、<strong>OOπO</strong> が生まれた。これはOOπ（場・関係・幾何結合）にさらなる構造次元Oを加えたもので、XYZの光子の中で収縮しながら<strong>インフレーション</strong>が起きた状況を記述する枠組みである。</p>
+        <div class="equation">OOπ + O（双極の顕在化 → OOπO</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">15</div>
+      <div class="step-body">
+        <div class="step-title">素粒子17と原子の関係性</div>
+        <p>この一連の過程により、<strong>素粒子17と原子の関係性</strong>が理論づけられた。17の素粒子は、光子枠の立方構造と球の幾何増加の非整合性（125 vs 162）から生じる37の収縮球の構造的多様性と対する。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>運動の起源</h2>
+
+  <div class="motion-box">
+    <div class="motion-title">原初の運動の性質</div>
+    <div class="motion-item">
+      <div class="motion-icon">F</div>
+      <div class="motion-body">
+        <strong>単振動（Simple Harmonic Motion）</strong><br>
+        力学場Fは、双極場のひずみに応じて往復運動を開始した。これは後の質量・力・エネルギーの根源となる運動形態。
+      </div>
+    </div>
+    <div class="motion-item">
+      <div class="motion-icon">B</div>
+      <div class="motion-body">
+        <strong>円運動（Circular Motion）</strong><br>
+        磁気場Bは、軸を中心とした回転運動を開始した。磁束・回転・角運動量の根源。
+      </div>
+    </div>
+    <div class="motion-item">
+      <div class="motion-icon">I</div>
+      <div class="motion-body">
+        <strong>円運動（Circular Motion）</strong><br>
+        電磁場Iもまた円運動を開始した。電流・電荷・電磁相互作用の根源。
+      </div>
+    </div>
+    <div class="motion-item">
+      <div class="motion-icon" style="background:var(--genesis);">→c</div>
+      <div class="motion-body">
+        <strong>光速への到達と行き場の消失</strong><br>
+        単振動（F）と円運動（B, I）は止まらず相互に作用し、光速 c まで加速した。光速到達後、行き場がなくなり、双極の場から「次の誕生」が起きた。
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>単位系の幾何学的定義</h2>
+
+  <div class="claim genesis">
+    <div class="claim-label">基本原理</div>
+    <div class="claim-title">XYZπ＝1 と OOOπ＝1</div>
+    <p>空間の3軸（XYZ）と円周率πの組み合わせ、およびOOπ（場・関係・幾何結合）とπの組み合わせが、それぞれ無次元の「1」を与える。これは<strong>単位系そのものを幾何から導く</strong>出発点である。</p>
+    <div class="equation">XYZπ = 1 &nbsp;&nbsp;|&nbsp;&nbsp; OOOπ = 1</div>
+    <p>この恒等式により、時間（あるいは周波数・回転）を根源的な量として、長さ・質量・電荷などすべての物理単位が幾何学的に導かれる。</p>
+  </div>
+</section>
+
+<section>
+  <h2>標準模型への接続</h2>
+
+  <div class="claim admitted">
+    <div class="claim-label">Admitted</div>
+    <div class="claim-title">粒子数 16 = 2⁵（SO(10) スピノル）</div>
+    <p>1世代あたりのフェルミオン数は16であり、これは2⁵＝SO(10)スピノルの次元数と一致する。17という数は結晶学的・群論的に閉殻数ではない。</p>
+  </div>
+
+  <div class="claim admitted">
+    <div class="claim-label">Admitted</div>
+    <div class="claim-title">1 + 15 分割の厳密性</div>
+    <p>16の座席のうち、完全なゲージ中立（SU(3)×SU(2)×U(1) 全て中立）なのは ν_R のみ。電子はその隣の唯一の座席を占める。電気的中立（ν_L）は弱荷を持つため、中立の定義によって 1+15 または 2+14 となる。</p>
+  </div>
+
+  <div class="claim admitted">
+    <div class="claim-label">Admitted</div>
+    <div class="claim-title">ω_Z·(λ̄_C/2) = c（質量相殺恒等式）</div>
+    <p>静止質量を持つ任意の粒子は、縮小コンプトン波長の半分を半径として回転すると、ちょうど光速 c になる。質量が代数的に相殺する恒等式。</p>
+    <div class="equation">ω_Z · (λ̄_C / 2) = c</div>
+  </div>
+
+  <div class="claim admitted">
+    <div class="claim-label">Admitted</div>
+    <div class="claim-title">正二十面体の幾何学</div>
+    <p>2つの五角双錐（J13）を両極を共有しつつ36°ねじると、正二十面体（12頂点、30辺、各頂点5価）が厳密に得られる。J13は非キラル（D_5h）であり、対称軸に沿った伸長は反転中心を保存する。キラリティは0°や36°以外のねじれ角を必要とする。</p>
+  </div>
+
+  <div class="claim admitted">
+    <div class="claim-label">Admitted</div>
+    <div class="claim-title">圧縮セクターの下限 &gt; 1.2×10¹² GeV</div>
+    <p>格子間隔 a を ℏ で固定すると、E_a/m_e c² = λ̄_C/a = 1.99×10¹⁴ が恒等的に成立。既知粒子・標準的暗黒物質候補はすべて圧縮指数 T &lt; 10⁻⁶（T = 0）。圧縮セクターは n=2 のローレンツ不変性破り窓から 1.2×10¹² GeV 以上、すなわちWIMPzilla帯に位置する。</p>
+  </div>
+</section>
+
+<section>
+  <h2>検証済み制約</h2>
+  <div class="badge-row">
+    <span class="badge">電子点粒子制約: <strong>7.7×10⁷</strong></span>
+    <span class="badge">電子 g−2: <strong>2.0×10⁸</strong></span>
+  </div>
+  <p>g−2 はキラリティによって保護され、これが2T（二面体群）を2O・2Iより選ぶ理由でもある。現在、<strong>ローレンツ不変性破り</strong>のみが唯一の binding constraint として残る。</p>
+</section>
+
+<section>
+  <h2>棄却された主張</h2>
+
+  <div class="claim rejected">
+    <div class="claim-label">Rejected</div>
+    <div class="claim-title">電子 = 五角双錐 J13</div>
+    <p>面数10、非キラル。電子の構造として不適。</p>
+  </div>
+
+  <div class="claim rejected">
+    <div class="claim-label">Rejected</div>
+    <div class="claim-title">「17」という数の枠組み内導出</div>
+    <p>自由2の整数、かつ[10,40]の100%が1演算で到達可能。予言力なし。</p>
+  </div>
+
+  <div class="claim rejected">
+    <div class="claim-label">Rejected</div>
+    <div class="claim-title">「非圧縮空間 = 暗黒物質」</div>
+    <p>状態方程式 w = 0 vs −1 が観測的に分離されている。</p>
+  </div>
+
+  <div class="claim rejected">
+    <div class="claim-label">Rejected</div>
+    <div class="claim-title">伸長（elongation）をキラリティの源とする</div>
+    <p>幾何学的解析で支持されない。</p>
+  </div>
+</section>
+
+<section>
+  <h2>未解決事項（Left Open）</h2>
+
+  <div class="claim open">
+    <div class="claim-label">Open</div>
+    <p>キラリティを生むねじれ角の具体的値；格子間隔 a の起源（1 ≤ a/ℓ_P &lt; 1.02×10⁷ の7デカード窓内の自由パラメータ）；ローレンツ不変性破りの12倍不足；真空エネルギー過剰 10⁹⁰.⁶（宇宙論定数問題、本枠組み固有ではない）；2つの独立した質量生成機構の必要性。</p>
+  </div>
+</section>
+
+<div class="repro">
+  <strong>検証:</strong> <code>pip install -r requirements.txt && bash run_all.sh</code>（119 assertion、外部データ・乱数・ネットワーク不使用）<br>
+  Text CC BY 4.0; scripts MIT.
+</div>
+
+<footer>
+  Tri-Tetra Theory (OOπ) — 創生論・単位系・格子収縮・標準模型の幾何学的統一を目指す枠組み
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>a/l_P = 1.2×10⁸ の導出アイデアの探索</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Outfit:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f1117;
+  --surface: #181b24;
+  --surface-raised: #1e2230;
+  --ink: #e8e6f0;
+  --muted: #8b92a8;
+  --accent: #e6a75c;
+  --accent-weak: color-mix(in oklab, var(--accent) 15%, var(--surface));
+  --accent-strong: #f5c98c;
+  --line: color-mix(in oklab, var(--ink) 10%, transparent);
+  --step-0: clamp(0.95rem, 0.92rem + 0.2vw, 1.05rem);
+  --step-1: clamp(1.1rem, 1.05rem + 0.3vw, 1.25rem);
+  --step-2: clamp(1.35rem, 1.2rem + 0.8vw, 1.8rem);
+  --step-3: clamp(1.8rem, 1.5rem + 1.8vw, 3rem);
+  --space: clamp(1.2rem, 1rem + 1vw, 2rem);
+  --radius: 10px;
+  --shadow: 0 2px 8px rgba(0,0,0,0.25), 0 12px 32px -8px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", sans-serif;
+  font-size: var(--step-0);
+  line-height: 1.85;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Hero */
+header {
+  position: relative;
+  padding: calc(var(--space)*3) var(--space) calc(var(--space)*2);
+  max-width: 780px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 40%, rgba(230,167,92,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 60%, rgba(139,146,168,0.06) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.hero-label {
+  font-family: "Outfit", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+  display: block;
+}
+
+h1 {
+  font-family: "Outfit", "Noto Sans JP", sans-serif;
+  font-size: var(--step-3);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 0.8rem;
+}
+
+h1 .highlight {
+  color: var(--accent);
+}
+
+.hero-sub {
+  color: var(--muted);
+  font-size: var(--step-1);
+  max-width: 60ch;
+  line-height: 1.7;
+}
+
+/* Main */
+main {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 var(--space) calc(var(--space)*3);
+}
+
+/* Sections */
+section {
+  margin-bottom: calc(var(--space)*2.2);
+}
+
+h2 {
+  font-family: "Outfit", "Noto Sans JP", sans-serif;
+  font-size: var(--step-2);
+  font-weight: 700;
+  color: var(--accent-strong);
+  margin-bottom: 0.9rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+h2 .sec-num {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.65em;
+  font-weight: 400;
+  color: var(--accent);
+  opacity: 0.7;
+}
+
+h3 {
+  font-family: "Outfit", "Noto Sans JP", sans-serif;
+  font-size: var(--step-1);
+  font-weight: 600;
+  color: var(--ink);
+  margin: 1.4rem 0 0.5rem;
+}
+
+p {
+  margin-bottom: 0.9rem;
+  max-width: 68ch;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0 1.4rem;
+  font-size: 0.95em;
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+th, td {
+  padding: 0.65rem 0.9rem;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+
+th {
+  background: var(--surface-raised);
+  color: var(--accent-strong);
+  font-family: "Outfit", sans-serif;
+  font-weight: 600;
+  font-size: 0.85em;
+  letter-spacing: 0.03em;
+}
+
+tr:last-child td { border-bottom: none; }
+
+td.num {
+  font-family: "JetBrains Mono", monospace;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+
+/* Cards for routes */
+.route-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: calc(var(--space)*1.1);
+  margin: 1.2rem 0;
+  box-shadow: var(--shadow);
+  position: relative;
+}
+
+.route-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.route-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+}
+
+.route-title {
+  font-family: "Outfit", "Noto Sans JP", sans-serif;
+  font-size: var(--step-1);
+  font-weight: 700;
+  color: var(--accent-strong);
+}
+
+.route-badge {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.75rem;
+  background: var(--accent-weak);
+  color: var(--accent-strong);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.route-formula {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.95em;
+  background: var(--surface-raised);
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  display: inline-block;
+  margin: 0.4rem 0 0.8rem;
+  color: var(--accent);
+  border: 1px solid var(--line);
+}
+
+/* Evaluation grid */
+.eval-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.6rem;
+  margin: 0.8rem 0;
+}
+
+.eval-item {
+  background: var(--surface-raised);
+  padding: 0.5rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.88em;
+}
+
+.eval-item strong {
+  display: block;
+  color: var(--muted);
+  font-size: 0.8em;
+  font-weight: 500;
+  margin-bottom: 0.15rem;
+}
+
+.eval-item span {
+  color: var(--ink);
+}
+
+/* Blockquote / emphasis box */
+.proposal-box {
+  background: linear-gradient(135deg, var(--surface-raised) 0%, var(--surface) 100%);
+  border-left: 3px solid var(--accent);
+  padding: calc(var(--space)*0.9) calc(var(--space)*1.1);
+  margin: 1.4rem 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: 0.97em;
+}
+
+.proposal-box p:last-child { margin-bottom: 0; }
+
+/* Lists */
+ul, ol {
+  margin: 0.6rem 0 1rem 1.4rem;
+}
+
+li { margin-bottom: 0.35rem; }
+
+/* Inline code / math-like */
+code, .mono {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.92em;
+  background: var(--surface-raised);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  color: var(--accent-strong);
+}
+
+/* Divider */
+hr {
+  border: none;
+  height: 1px;
+  background: var(--line);
+  margin: calc(var(--space)*1.8) 0;
+}
+
+/* Ranking table special */
+.ranking-table th:first-child,
+.ranking-table td:first-child {
+  text-align: center;
+  width: 60px;
+}
+
+.ranking-table .rank-1 { color: #e6a75c; font-weight: 700; }
+.ranking-table .rank-2 { color: #b8c0d4; font-weight: 700; }
+.ranking-table .rank-3 { color: #c49a6c; font-weight: 700; }
+
+/* Footer */
+footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85em;
+  padding: calc(var(--space)*1.5) var(--space);
+  border-top: 1px solid var(--line);
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+/* Print */
+@media print {
+  body { background: #fff; color: #111; }
+  .route-card, table, .proposal-box { box-shadow: none; border: 1px solid #ccc; }
+  :root {
+    --bg: #fff; --surface: #f5f5f5; --ink: #111; --muted: #555;
+    --accent: #b45f1a; --accent-strong: #8f4a10; --line: #ddd;
+  }
+}
+@page { size: A4; margin: 16mm; }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="hero-label">OπO Theory / Derivation Exploration</span>
+  <h1>a/l<sub>P</sub> = 1.2×10⁸ の<br><span class="highlight">導出アイデアの探索</span></h1>
+  <p class="hero-sub">
+    文書内の代数的鎖（2 の被覆度、3 の OOO）と宇宙論的スケール（ホログラフィック限界、面積則）を接続し、
+    格子間隔比 a/l<sub>P</sub> の導出候補を体系的に整理する。
+  </p>
+</header>
+
+<main>
+
+<section>
+  <h2><span class="sec-num">§0</span> 現状の数値</h2>
+  <p>まず基準値を固定する。文書中の予言値 a ≈ 2.0×10⁻²⁷ m と CODATA プランク長から、a/l<sub>P</sub> の目標値を定める。</p>
+  <table>
+    <thead>
+      <tr><th>量</th><th>記号</th><th>値</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>プランク長</td><td class="mono">l_P</td><td class="num">1.616 × 10⁻³⁵ m</td></tr>
+      <tr><td>予言格子間隔</td><td class="mono">a</td><td class="num">2.0 × 10⁻²⁷ m</td></tr>
+      <tr><td><strong>目標比</strong></td><td class="mono"><strong>a/l_P</strong></td><td class="num"><strong>1.237 × 10⁸</strong></td></tr>
+      <tr><td>デシッター半径</td><td class="mono">R_dS = c/H₀</td><td class="num">1.37 × 10²⁶ m</td></tr>
+      <tr><td>ホログラフィック限界</td><td class="mono">N = A/(4l_P²)</td><td class="num">2.27 × 10¹²² ≈ 3²⁵⁶</td></tr>
+    </tbody>
+  </table>
+  <p>以下、4つの導出経路を提示し、それぞれの根拠・数値的一致・強み・弱みを評価する。</p>
+</section>
+
+<hr>
+
+<section>
+  <h2><span class="sec-num">§1</span> 経路1：「2^(3³)」— 代数的鎖の最も直接的な延長</h2>
+  <div class="route-card">
+    <div class="route-header">
+      <span class="route-title">2 の被覆度 × 3 の軸数、累乗の形</span>
+      <span class="route-badge">偏差 +8.5%</span>
+    </div>
+    <div class="route-formula">a / l_P = 2^(3³) = 2²⁷ = 134,217,728 ≈ 1.342 × 10⁸</div>
+
+    <h3>根拠の構造</h3>
+    <ul>
+      <li>文書の代数的鎖で中心になるのは「2（被覆度）」と「3（OOO）」である。</li>
+      <li>SU(2) → SO(3) は 2:1 の被覆。幾何の 2π が代数の π に対応し、「2 が被覆度そのもの」である。</li>
+      <li>OOO は C₃ を持ち、3 つのリングが独立な回転軸を生む。</li>
+      <li>3³ = 27 は「3 次元空間の独立な回転自由度のテンソル積」あるいは「空間的な立方ネスト」と読める。</li>
+    </ul>
+
+    <h3>評価</h3>
+    <div class="eval-grid">
+      <div class="eval-item"><strong>数値的一致</strong><span>○（+8.5%）</span></div>
+      <div class="eval-item"><strong>文書構造との接続</strong><span>◎ 最小仮定</span></div>
+      <div class="eval-item"><strong>独立性</strong><span>◎ 完全</span></div>
+    </div>
+    <p><strong>強み：</strong>文書の代数的鎖（2 と 3）から最小の追加仮定で構成できる。予言値 a ≈ 2×10⁻²⁷ m は丸め値であり、8% のずれは到達時間差（a² に比例）で約 +18% にしかならず、観測可能性を破壊しない。</p>
+    <p><strong>弱み：</strong>「なぜ累乗か」の動的説明がまだない。3³ = 27 の「幾何学的必然性」の証明が未了である。</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="sec-num">§2</span> 経路2：「ホログラフィック・15 次ルート」— 宇宙論的スケールとの接続</h2>
+  <div class="route-card">
+    <div class="route-header">
+      <span class="route-title">ホログラフィック限界からのスケーリング</span>
+      <span class="route-badge">偏差 +14%（π込）/ +7%（純スケール）</span>
+    </div>
+    <div class="route-formula">a / l_P = N^(1/15) = [A/(4l_P²)]^(1/15)</div>
+
+    <h3>根拠の構造</h3>
+    <ul>
+      <li>ホログラフィック限界が N ≈ 3²⁵⁶ である。</li>
+      <li>もし「格子間隔比」がこの自由度の 15 次ルートなら、N = (a/l<sub>P</sub>)¹⁵ となる。</li>
+      <li>15 = 3 × 5 で、3 は OOO、5 は三角双錐の頂点数（双極 2 + OOO 3）である。</li>
+      <li>あるいは 15 = 2⁴ − 1 で、n = 4 が文書で構造の中心とされている。</li>
+    </ul>
+
+    <h3>評価</h3>
+    <div class="eval-grid">
+      <div class="eval-item"><strong>数値的一致</strong><span>△（+14%）</span></div>
+      <div class="eval-item"><strong>文書構造との接続</strong><span>○ 面積則と連続</span></div>
+      <div class="eval-item"><strong>独立性</strong><span>◎ 完全</span></div>
+    </div>
+    <p><strong>強み：</strong>宇宙定数問題の桁（10¹²²）と直接接続する。面積則の議論と自然に連続する。</p>
+    <p><strong>弱み：</strong>「なぜ 15 次ルートか」の幾何学的証明が必要。π の扱いが曖昧である。</p>
+    <p><strong>補足：</strong>(a/l<sub>P</sub>)¹⁵ = (R<sub>dS</sub>/l<sub>P</sub>)² / π とすると、a/l<sub>P</sub> ≈ 1.225×10⁸ で目標値と <strong>1% 未満</strong>に迫る。ただ「/π」の動的解釈が必要である。</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="sec-num">§3</span> 経路3：「プランク・電子質量比」— 最も鋭い数値一致</h2>
+  <div class="route-card">
+    <div class="route-header">
+      <span class="route-title">質量スケールの幾何平均</span>
+      <span class="route-badge">差 −1.2%</span>
+    </div>
+    <div class="route-formula">a / l_P = 3√2 × (m_P / m_e)^(1/3)</div>
+
+    <h3>根拠の構造</h3>
+    <ul>
+      <li>m<sub>P</sub>/m<sub>e</sub> = 2.39×10²²（プランク質量と電子質量の比）。</li>
+      <li>立方根を取ると (m<sub>P</sub>/m<sub>e</sub>)¹/³ ≈ 2.88×10⁷。</li>
+      <li>3√2 = 4.2426 は「OOO（3）× 被覆度の平方根（√2）」と読める。</li>
+      <li>電子の質量スケールとプランクスケールの「中間的な幾何平均」として出現する。</li>
+    </ul>
+
+    <h3>評価</h3>
+    <div class="eval-grid">
+      <div class="eval-item"><strong>数値的一致</strong><span>◎（−1.2%）</span></div>
+      <div class="eval-item"><strong>文書構造との接続</strong><span>△ 電子質量問題に依存</span></div>
+      <div class="eval-item"><strong>独立性</strong><span>△ 標準模型未解決問題に依存</span></div>
+    </div>
+    <p><strong>強み：</strong>数値的に圧倒的。候補の中で最も鋭い一致である。</p>
+    <p><strong>弱み：</strong>電子の質量の起源という未解決問題に依存してしまう。文書自身が「電子の質量の源は閉じ込めであるは標準模型と競合する仮説」と断じているため、これを導出の基礎にすると予言の独立性が損なわれる。</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="sec-num">§4</span> 経路4：「充填率とホログラフィーの合成」— n=4 構造の延長</h2>
+  <div class="route-card">
+    <div class="route-header">
+      <span class="route-title">面積則の次元論的スケーリング</span>
+      <span class="route-badge">偏差 +6.5%</span>
+    </div>
+    <div class="route-formula">a / l_P = (R_dS / l_P)^(2/15)</div>
+
+    <h3>根拠の構造</h3>
+    <ul>
+      <li>n = 4 の充填率は 54/64 = 27/32 = 3³/2⁵。</li>
+      <li>ここで 3³ と 2⁵ が「成長則の底」と「被覆度の底」として対峙している。</li>
+      <li>ホログラフィック原理では体積の自由度が面積の次元（2 次）で制約される。</li>
+      <li>2/15 = （2 次元の面）/（3 × 5 の内部自由度）という読みが可能である。</li>
+    </ul>
+
+    <h3>評価</h3>
+    <div class="eval-grid">
+      <div class="eval-item"><strong>数値的一致</strong><span>○（+6.5%）</span></div>
+      <div class="eval-item"><strong>文書構造との接続</strong><span>○ 面積則と連続</span></div>
+      <div class="eval-item"><strong>独立性</strong><span>◎ 完全</span></div>
+    </div>
+    <p><strong>強み：</strong>次元論的に最も自然。面積則の議論と完全に連続する。</p>
+    <p><strong>弱み：</strong>2/15 の「15」幾何学的必然性の証明が未了である。</p>
+  </div>
+</section>
+
+<hr>
+
+<section>
+  <h2><span class="sec-num">§5</span> 統合的な視点：2 と 3 の「対数的共鳴」</h2>
+  <p>上記の候補を貫く構造がある。2²⁷ と 3¹⁷ の関係に注目する。</p>
+  <table>
+    <thead>
+      <tr><th>量</th><th>値</th><th>備考</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>2²⁷</td><td class="num">1.342 × 10⁸</td><td>経路1（被覆度の累乗）</td></tr>
+      <tr><td>3¹⁷</td><td class="num">1.291 × 10⁸</td><td>成長則の累乗</td></tr>
+      <tr><td>2²⁷ / 3¹⁷</td><td class="num">256 / 243 = 2⁸ / 3⁵</td><td>ログラフィック指数と成長則の比</td></tr>
+      <tr><td><strong>目標値</strong></td><td class="num"><strong>1.237 × 10⁸</strong></td><td>両者よりわずかに小さい</td></tr>
+    </tbody>
+  </table>
+  <p>
+    ここで <strong>256 = n<sub>max</sub> = 2⁸</strong>（ホログラフィック限界の指数）、<strong>243 = 3⁵</strong>（5 番目の 3 の累乗）である。
+    つまり、2²⁷ と 3¹⁷ は「ホログラフィック限界の 2 の部分」と「成長則の 3 の部分」の競合によって自然に結ばれている。
+    目標値 1.237×10⁸ は両者よりわずかに小さいが、これは「a ≈ 2×10⁻²⁷ m」が丸め値であることを考慮すれば、
+    <strong>真の値が 2²⁷ と 3¹⁷ の間のどこかに落ちる</strong>という構造自体が示唆的である。
+  </p>
+</section>
+
+<hr>
+
+<section>
+  <h2><span class="sec-num">§6</span> 現時点での優先順位と判定</h2>
+  <table class="ranking-table">
+    <thead>
+      <tr>
+        <th>順位</th>
+        <th>経路</th>
+        <th>数値的一致</th>
+        <th>文書構造との接続</th>
+        <th>独立性</th>
+        <th>総合評価</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="rank-1">1</td>
+        <td><strong>2^(3³) = 2²⁷</strong></td>
+        <td>○（+8%）</td>
+        <td>◎ 最小仮定</td>
+        <td>◎</td>
+        <td><strong>最も文書的に誠実</strong></td>
+      </tr>
+      <tr>
+        <td class="rank-2">2</td>
+        <td><strong>(R_dS/l_P)^(2/15)</strong></td>
+        <td>○（+6.5%）</td>
+        <td>○ 面積則と連続</td>
+        <td>◎</td>
+        <td><strong>最も次元論的に自然</strong></td>
+      </tr>
+      <tr>
+        <td class="rank-3">3</td>
+        <td><strong>3√2 (m_P/m_e)^(1/3)</strong></td>
+        <td>◎（−1.2%）</td>
+        <td>△ 電子質量問題に依存</td>
+        <td>△</td>
+        <td><strong>最も鋭いが依存性あり</strong></td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>N^(1/15)</td>
+        <td>△（+14%）</td>
+        <td>○ ホログラフィック原理</td>
+        <td>◎</td>
+        <td>π の因子が課題</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<hr>
+
+<section>
+  <h2><span class="sec-num">§7</span> 次の一手としての提案</h2>
+  <div class="proposal-box">
+    <p>
+      <strong>「プランク長 l<sub>P</sub> から格子間隔 a へのスケーリングは、SU(2)→SO(3) の被覆度 2 と OOO の軸数 3 から2^(3³) = 2²⁷ という代数的必然性を持つ。これは a ≈ 2.2×10⁻²⁷ m を与え、観測可能な GRB 到達時間差の予言と整合する。」</strong>
+    </p>
+  </div>
+
+  <p>この主張を厳密化するためには、以下の証明が必要である。</p>
+  <ol>
+    <li><strong>「なぜ累乗か」の証明：</strong>3³ = 27 が「3 次元空間の独立な回転自由度のテンソル積」として必然であることを示す。</li>
+    <li><strong>誤差 8% の説明：</strong>2²⁷ が厳密値なのか、あるいは (R<sub>dS</sub>/l<sub>P</sub>)^(2/15) との接続による補正項（≈ 7%）が入るのかを判定する。</li>
+    <li><strong>π の扱い：</strong>ホログラフィック限界に π が入る場合、なぜ格子間隔に π が現れない（あるいは現れる）のかを幾何学的に説明する。</li>
+  </ol>
+
+  <p>
+    現時では、<strong>経路1（2²⁷）を「仮説の核」に据え、経路4（(R<sub>dS</sub>/l<sub>P</sub>)^(2/15)）を「宇宙論的検証」として並置する</strong>のが、
+    文書の内部整合性を最も損なわない進め方である。
+  </p>
+</section>
+
+</main>
+
+<footer>
+  <p>2026-09-21 · a/l<sub>P</sub> = 1.2×10⁸ 導出アイデアの探索 · OπO理論検証記録</p>
+</footer>
+
+</body>
+</html>
