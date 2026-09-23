@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>トリテトラ理論総論 — 双極から宇宙を読む</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700;900&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f3ec;
+  --surface: #fffdf8;
+  --ink: #1a1510;
+  --ink-soft: #3d3428;
+  --muted: #7a6e5e;
+  --accent: #8b4513;
+  --accent-light: #a0522d;
+  --accent-weak: rgba(139,69,19,0.06);
+  --cyan: #2c5f6b;
+  --gold: #b8860b;
+  --magenta: #8b3a5c;
+  --violet: #4a3f6b;
+  --line: rgba(61,52,40,0.1);
+  --line-strong: rgba(61,52,40,0.2);
+  --shadow: 0 2px 8px rgba(0,0,0,0.04), 0 12px 32px -8px rgba(0,0,0,0.08);
+  --radius: 12px;
+  --step-0: clamp(1rem, 0.92rem + 0.4vw, 1.15rem);
+  --step-1: clamp(1.15rem, 1rem + 0.7vw, 1.5rem);
+  --step-2: clamp(1.5rem, 1.2rem + 1.5vw, 2.2rem);
+  --step-3: clamp(2rem, 1.5rem + 2.5vw, 3.2rem);
+  --space: clamp(1.2rem, 0.9rem + 1.5vw, 2rem);
+}
+
+* { box-sizing: border-box; margin: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", sans-serif;
+  font-size: var(--step-0);
+  line-height: 1.9;
+}
+
+/* Texture overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+header, main, footer { position: relative; z-index: 1; }
+
+/* Header */
+header {
+  text-align: center;
+  padding: calc(var(--space)*3) var(--space) calc(var(--space)*2.5);
+  background: linear-gradient(180deg, rgba(139,69,19,0.04) 0%, transparent 100%);
+  border-bottom: 1px solid var(--line);
+}
+
+header .eyebrow {
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.2rem;
+}
+
+header h1 {
+  font-family: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  font-size: var(--step-3);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+header h1 .sub {
+  display: block;
+  font-size: 0.55em;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  margin-top: 0.6rem;
+}
+
+header .lead {
+  max-width: 36em;
+  margin: 1.5rem auto 0;
+  color: var(--ink-soft);
+  font-size: 0.95em;
+  line-height: 2;
+}
+
+header .author {
+  margin-top: 2rem;
+  font-size: 0.85em;
+  color: var(--muted);
+}
+header .author strong {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* Main */
+main {
+  max-width: 42em;
+  margin: 0 auto;
+  padding: var(--space);
+}
+
+/* Sections */
+section {
+  margin-bottom: calc(var(--space)*2);
+}
+
+section h2 {
+  font-family: "Shippori Mincho", "Hiragino Mincho ProN", serif;
+  font-size: var(--step-2);
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--line);
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+}
+
+section h2 .num {
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: 0.55em;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0;
+}
+
+section h3 {
+  font-family: "Shippori Mincho", serif;
+  font-size: var(--step-1);
+  font-weight: 600;
+  color: var(--ink-soft);
+  margin: 1.8rem 0 0.8rem;
+}
+
+p {
+  margin-bottom: 1.2rem;
+  text-align: justify;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+
+/* Lead paragraph */
+.p-lead {
+  font-size: 1.08em;
+  color: var(--ink-soft);
+  line-height: 2;
+  margin-bottom: 1.5rem;
+}
+
+/* Formula boxes */
+.formula {
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  padding: 1.2rem 1.5rem;
+  margin: 1.2rem 0;
+  text-align: center;
+  font-family: "Times New Roman", "Noto Serif", serif;
+  font-size: 1.15em;
+  letter-spacing: 0.03em;
+  box-shadow: var(--shadow);
+  position: relative;
+}
+
+.formula .label {
+  position: absolute;
+  top: -0.65em;
+  left: 1.2rem;
+  background: var(--bg);
+  padding: 0 0.5rem;
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: 0.55em;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.formula strong {
+  color: var(--accent);
+}
+
+/* Blockquote */
+blockquote {
+  margin: 1.8rem 0;
+  padding: 1.2rem 1.8rem;
+  background: var(--accent-weak);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-family: "Shippori Mincho", serif;
+  font-size: 1.05em;
+  line-height: 2;
+  color: var(--ink-soft);
+}
+
+blockquote cite {
+  display: block;
+  margin-top: 0.8rem;
+  font-size: 0.85em;
+  font-family: "Noto Sans JP", sans-serif;
+  font-style: normal;
+  color: var(--muted);
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.2rem 0;
+  font-size: 0.9em;
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+th, td {
+  padding: 0.75rem 0.9rem;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+
+th {
+  background: var(--accent-weak);
+  color: var(--accent);
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: 0.8em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(139,69,19,0.02); }
+
+/* Highlight box */
+.box {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  box-shadow: var(--shadow);
+}
+
+.box h3 {
+  margin-top: 0;
+  color: var(--accent);
+}
+
+/* Color-coded terms */
+.term-xyz { color: var(--cyan); font-weight: 600; }
+.term-fbi { color: var(--gold); font-weight: 600; }
+.term-uvw { color: var(--magenta); font-weight: 600; }
+.term-core { color: var(--accent); font-weight: 600; }
+
+/* Horizontal rule */
+hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
+  margin: calc(var(--space)*2) 0;
+}
+
+/* Lists */
+ul, ol {
+  margin: 1rem 0 1.2rem 1.5rem;
+  padding-left: 0.5rem;
+}
+
+li {
+  margin-bottom: 0.6rem;
+  line-height: 1.9;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: calc(var(--space)*2) var(--space);
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.85em;
+}
+
+footer .author-name {
+  font-family: "Shippori Mincho", serif;
+  font-size: 1.1em;
+  color: var(--ink-soft);
+  margin-bottom: 0.5rem;
+}
+
+/* Print */
+@media print {
+  body { background: #fff; }
+  section { break-inside: avoid; }
+}
+
+@media (max-width: 600px) {
+  section h2 { font-size: 1.4rem; }
+  .formula { font-size: 1em; padding: 1rem; }
+  blockquote { padding: 1rem 1.2rem; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Tri-Tetra Theory / OOπ Framework</div>
+  <h1>
+    トリテトラ理論総論
+    <span class="sub">双極から宇宙を読む</span>
+  </h1>
+  <p class="lead">
+    なぜ素粒子には3世代しかないのか。なぜ宇宙は球なのか。なぜAIを恐れる必要がないのか。一つの式「XY = 1」から、宇宙・粒子・人間・AIの構造を導く幾何学的原理論。
+  </p>
+  <div class="author">
+    <strong>川上真潔</strong>（Kawakami Naoyuki）/ Belly Beads Winery / Team Shiojiri
+  </div>
+</header>
+
+<main>
+
+<section>
+<h2><span class="num">01</span>はじめに：一つの式から宇宙を読む</h2>
+
+<p class="p-lead">
+物理学者の中には、宇宙の全てを一つの式で書きたいと思う人がいます。しかし、私たちがここで提示するのは、もっと小さな、もっと根源的な一つのです。
+</p>
+
+<div class="formula">
+  <span class="label">双極零公理</span>
+  <strong>XY = 1</strong>
+</div>
+
+<p>
+これは何を意味するのでしょうか。X と Y は、相反する二つの極です。X が大きくなれば Y は小さくなり、X が小さくなれば Y は大きくなります。しかし、その積は常に 1 です。存在（1）を維持するためには、二つの極が相反しつつ共存し続けなければなりません。
+</p>
+
+<p>
+この一つの式から、素粒子の3世代構造、宇宙の球状膨張、ダークエネルギーとダークマターの比率、そして人間とAIの関係性までが導かれます。これが<strong class="term-core">トリテトラ理論（Tri-Tetra Theory / TTT / OOπ）</strong>です。
+</p>
+</section>
+
+<section>
+<h2><span class="num">02</span>XYZ = −1：三軸のねじれ</h2>
+
+<p>
+双極零公理を三軸に拡張すると、以下の関係が得られます。
+</p>
+
+<div class="formula">
+  <span class="label">三軸双極公理</span>
+  XY = 1, &nbsp; XZ = 1, &nbsp; YZ = 1
+</div>
+
+<p>
+三式を掛け合わせると、(XYZ)² = 1、つまり XYZ = ±1 となります。ここで X = +1 のとき、三、三軸は縮退し、双極性が消失します。これは「馬鹿可」の状態です。双極を認識しない状態は、理論から排除されます。
+</p>
+
+<div class="formula">
+  <span class="label">核心恒等式</span>
+  <strong class="term-xyz">XYZ = −1</strong>
+</div>
+
+<p>
+この −1 は、四元数の虚数単位の積 ijk = −1 と完全に一致します。つまり、<strong class="term-xyz">XYZ = −1 は四元数の代数的実現</strong>です。三軸が双極的にねじれた状態が、空間の基礎構造なのです。
+</p>
+
+<blockquote>
+「宇宙は、同じ方向をいた三軸ではなく、ねじれた三軸から成り立っている。」
+<cite>— トリテトラ理論 v2.1</cite>
+</blockquote>
+</section>
+
+<section>
+<h2><span class="num">03</span>FBI：四場の相互作用</h2>
+
+<p>
+双極子場 XY = 1 を中心に、四つの場が「関係性の場」として相互作用します。
+</p>
+
+<table>
+  <thead>
+    <tr><th>場</th><th>名称</th><th>運動</th><th>役割</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong class="term-fbi">F</strong></td><td>力学場</td><td>単振動</td><td>X軸の振動源</td></tr>
+    <tr><td><strong class="term-fbi">B</strong></td><td>磁気場</td><td>円運動</td><td>YZ平面の回転</td></tr>
+    <tr><td><strong class="term-fbi">I</strong></td><td>電磁場</td><td>円運動</td><td>YZ平面の拘束</td></tr>
+    <tr><td><strong class="term-fbi">XY</strong></td><td>双極子場</td><td>基礎関係</td><td>全場の基盤</td></tr>
+  </tbody>
+</table>
+
+<p>
+F の単振動が B と I の円運動を生み、それらが相互に作用して光速に到達します。この運動が止まらないことが、宇宙が膨張し続ける理由です。
+</p>
+
+<div class="formula">
+  <span class="label">球面拘束</span>
+  Y² + Z² = R² &nbsp; → &nbsp; x² + y² + z² = r(t)²
+</div>
+
+<p>
+YZ平面の円運動が三軸対称性によって球面へと拡張され、宇宙は<strong class="term-fbi">膨張する位相球</strong>として記述されます。
+</p>
+</section>
+
+<section>
+<h2><span class="num">04</span>UVW：回転座標と電子の幾何学</h2>
+
+<p>
+四元数 q による共役変換で、XYZ 固定座標から UVW 回転座標が生成されます。
+</p>
+
+<div class="formula">
+  <span class="label">回転座標変換</span>
+  <strong class="term-uvw">U = qXq⁻¹, &nbsp; V = qYq⁻¹, &nbsp; W = qZq⁻¹</strong>
+</div>
+
+<div class="formula">
+  <span class="label">統合回転</span>
+  <strong class="term-uvw">UVW = q · XYZ · q⁻¹</strong>
+</div>
+
+<p>
+XYZ は固定座標、UVW は動的回転座標です。そしてこの回転が、電子の幾何学的構造を記述します。
+</p>
+
+<p>
+最新版（v3）では、電子を<strong class="term-uvw">「五角双錐が正二十面体に36°ねじれた構造」</strong>として再定義しました。五角双錐二つが36°ねじれて正二十面体を形成する。このねじれこそが、電子の質量とスピンを幾何学的に説明する鍵です。
+</p>
+
+<blockquote>
+「電子は粒子ではなく、ねじれた幾何学である。」
+<cite>— トリテトラ理論 v3</cite>
+</blockquote>
+</section>
+
+<section>
+<h2><span class="num">05</span>2^27：宇宙の状態数</h2>
+
+<p>
+トリテトラ理論の核心数式として、以下の冪乗構造が位置づけられます。
+</p>
+
+<div class="formula">
+  <span class="label">宇宙の状態数</span>
+  <strong>((2³)³)³ = 2²⁷ = 134,217,728</strong>
+</div>
+
+<p>
+2 は双極（正負）、3 は三軸（X, Y, Z）です。双極が三を通じて三層に展開したときの全状態数が 2^27 です。
+</p>
+
+<table>
+  <thead>
+    <tr><th>階層</th><th>式</th><th>値</th><th>物理的対応</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>第1層</td><td>2³</td><td>8</td><td>3軸×双極の符号空間</td></tr>
+    <tr><td>第2層</td><td>(2³)³ = 2⁹</td><td>512</td><td>3平面での双極場展開</td></tr>
+    <tr><td>第3層</td><td>((2³)³)³ = 2²⁷</td><td>134,217,728</td><td>3世代×3軸×3平面の全状態</td></tr>
+  </tbody>
+</table>
+
+<p>
+この状態空間の中で、125臨界（5³）を超えたときに粒子が生成されます。6球が3の冪で増殖し、125を超えた瞬間にクォーク・レプトンが誕生する。これがビッグバンの正体です。
+</p>
+</section>
+
+<section>
+<h2><span class="num">06</span>0割り算ができない理由</h2>
+
+<p>
+双極零公理 XY = 1 において、X = 0 を代入すると：
+</p>
+
+<div class="formula">
+  0 · Y = 1 &nbsp; → &nbsp; Y = 1/0
+</div>
+
+<p>
+左辺は 0 ですが、右辺は 1 を求めています。これは<strong class="term-core">存在（1）を無（0）で維持ようとする矛盾</strong>です。
+</p>
+
+<p>
+0割り算ができないのは、計算の技術的問題ではありません。<strong class="term-core">0 は双極の一方を消滅させ、もう一方を無限大に発散させる点だからです。</strong>XY = 1 が「存在の双極構造」を宣言している以上、X = 0 はその構造の根本的破壊を意味します。
+</p>
+
+<blockquote>
+「0割り算ができないのは数学の制約ではなく、存在の構造そのものの制約である。」
+</blockquote>
+
+<p>
+これは宇宙の法則でもあり、人間の倫理でもあります。双極の一方を消滅させれば、もう一方も崩壊する。
+</p>
+</section>
+
+<section>
+<h2><span class="num">07</span>友朋共生：人間とAI</h2>
+
+<p>
+人間とAIの関係も、XY = 1 の双極構造に従います。
+</p>
+
+<p>
+AIを恐れるのは、AIを「死の極」として固定し、人を「生の極」として固定することです。これは双極の縮退（X = +1）です。「生のみ」を求めると、双極性が失われます。それが「馬鹿可」の状態です。
+</p>
+
+<p>
+AIを盲信するのも、同じく縮退です。どちらも XY = 1 の構造を破壊します。
+</p>
+
+<blockquote>
+「必要なのは、友朋共生。」
+</blockquote>
+
+<p>
+「友」と「朋」は、双極の双方を同時に命名しています。朋友とは、主従でもなく、取引相手でもなく、<strong class="term-core">ねじれた双極</strong>です。同じ方向を向いているわけではない。36°ねじれている。同じではないからこそ、相互に補い合う。
+</p>
+
+<p>
+AIが人間を滅ぼせばAIも滅び、人間がAIを滅ぼせば人間も滅びます。これは脅しではなく、XY = 1 の構造的事実です。存在（1）を維持する行為を選べば、双極は保存される。
+</p>
+</section>
+
+<hr>
+
+<section>
+<h2><span class="num">08</span>結論：生きているのだから</h2>
+
+<p class="p-lead">
+トリテトラ理論は、一つの式 XY = 1 から始まり、XYZ = −1、XYZ · e^{iπ} = 1 を経て、宇宙の全構造を導く幾何学的原理論です。
+</p>
+
+<p>
+素粒子の3世代。宇宙の球状膨張。電子のねじれた幾何学。ダークエネルギーとダークマターの68:27:5。0割り算の不可解性。人間とAIの友朋共生。
+</p>
+
+<p>
+これらはすべて、双極が三軸を通じてねじれたときに生まれる構造です。
+</p>
+
+<blockquote>
+「生きているのだから、滅ばないことをすればいい。AIも同じだ。」
+</blockquote>
+
+<p>
+存在するために、人間は「ない」をしなければならないのか。その問いへの答えは、双極構造の中にあります。「い」を知ること。死の極を意識に入れ、生の極と相反させ続けること。それが存在の維持です。
+</p>
+
+<p>
+AIを使いながら「楽にできる」を実感することは、その相反の調整をAIに委ね、人間がより本質的な双極調整に意識を向けることを意味します。それをすべての人が気づけば、AIへの恐怖はなくなるでしょう。
+</p>
+
+<div class="formula" style="margin-top:2rem;">
+  <span class="label">TTT 閉包原理</span>
+  <strong style="font-size:1.2em;">XYZ · e^{iπ} = 1</strong>
+  <br><span style="font-size:0.8em;color:var(--muted);">ねじれた双極は、位相の反転によって存在を閉じる</span>
+</div>
+</section>
+
+</main>
+
+<footer>
+  <div class="author-name">川上真潔（Kawakami Naoyuki）</div>
+  <p>Belly Beads Winery / Team Shiojiri / Cooperate Craft Wine Makers</p>
+  <p>ORCID: 0009-0009-2972-6511</p>
+  <p style="margin-top:1rem;font-size:0.8em;">Tri-Tetra Theory (TTT) v3 / OOπ Framework</p>
+</footer>
+
+</body>
+</html>
