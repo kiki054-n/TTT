@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TTT 創発階層図 — $2^{27}$ と標準模型フェルミオンの対応</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e27;
+  --surface: #11183a;
+  --surface-2: #1a2348;
+  --ink: #e8e6f0;
+  --muted: #8a8db5;
+  --accent: #f0b429;
+  --accent-dim: color-mix(in oklab, var(--accent) 30%, var(--bg));
+  --accent-glow: color-mix(in oklab, var(--accent) 15%, transparent);
+  --line: rgba(138, 141, 181, 0.18);
+  --cyan: #38bdf8;
+  --cyan-dim: color-mix(in oklab, var(--cyan) 20%, transparent);
+  --magenta: #c084fc;
+  --magenta-dim: color-mix(in oklab, var(--magenta) 20%, transparent);
+  --green: #4ade80;
+  --green-dim: color-mix(in oklab, var(--green) 20%, transparent);
+  --step--2: clamp(0.75rem, 0.7rem + 0.2vw, 0.875rem);
+  --step--1: clamp(0.875rem, 0.8rem + 0.3vw, 1rem);
+  --step-0: clamp(1rem, 0.9rem + 0.4vw, 1.125rem);
+  --step-1: clamp(1.2rem, 1rem + 0.8vw, 1.6rem);
+  --step-2: clamp(1.6rem, 1.2rem + 1.5vw, 2.4rem);
+  --step-3: clamp(2.2rem, 1.5rem + 2.5vw, 3.5rem);
+  --step-4: clamp(3rem, 2rem + 4vw, 5rem);
+  --space: clamp(1rem, 0.7rem + 1.2vw, 2rem);
+  --radius: 16px;
+  --shadow: 0 2px 4px rgba(0,0,0,0.3), 0 12px 32px -8px rgba(0,0,0,0.5);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; }
+
+body {
+  font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.85;
+  font-size: var(--step-0);
+  overflow-x: hidden;
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space);
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 20%, rgba(192,132,252,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 80%, rgba(56,189,248,0.06) 0%, transparent 50%),
+    var(--bg);
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.025'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-block;
+  font-family: "Orbitron", sans-serif;
+  font-size: var(--step--2);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid var(--accent-dim);
+  padding: 0.4em 1.2em;
+  border-radius: 999px;
+  margin-bottom: calc(var(--space) * 1.5);
+  background: var(--accent-glow);
+}
+
+.hero h1 {
+  font-family: "Orbitron", "Noto Sans JP", sans-serif;
+  font-size: var(--step-4);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: calc(var(--space) * 0.8);
+  background: linear-gradient(135deg, var(--ink) 0%, var(--accent) 60%, var(--cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-formula {
+  font-family: "Orbitron", monospace;
+  font-size: var(--step-2);
+  color: var(--accent);
+  letter-spacing: 0.05em;
+  margin-bottom: calc(var(--space) * 0.5);
+}
+
+.hero-sub {
+  font-size: var(--step-1);
+  color: var(--muted);
+  max-width: 52ch;
+  margin: 0 auto calc(var(--space) * 2);
+  font-weight: 300;
+}
+
+.hero-number {
+  font-family: "Orbitron", monospace;
+  font-size: var(--step-3);
+  color: var(--cyan);
+  letter-spacing: 0.03em;
+  margin-top: calc(var(--space) * 0.5);
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: calc(var(--space) * 2);
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--muted);
+  font-size: var(--step--2);
+  letter-spacing: 0.1em;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* Sections */
+main { max-width: 1200px; margin: 0 auto; padding: 0 var(--space); }
+
+section {
+  margin-bottom: calc(var(--space) * 4);
+  position: relative;
+}
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: calc(var(--space) * 1.5);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 0.8rem;
+}
+
+.section-num {
+  font-family: "Orbitron", sans-serif;
+  font-size: var(--step-3);
+  font-weight: 700;
+  color: var(--accent);
+  opacity: 0.5;
+  line-height: 1;
+}
+
+.section-title {
+  font-family: "Orbitron", "Noto Sans JP", sans-serif;
+  font-size: var(--step-2);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.section-desc {
+  color: var(--muted);
+  font-size: var(--step--1);
+  margin-top: 0.3rem;
+  margin-left: calc(var(--step-3) + 1rem);
+}
+
+/* Cards */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: calc(var(--space) * 1.2);
+  box-shadow: var(--shadow);
+}
+
+.card h3 {
+  font-family: "Orbitron", "Noto Sans JP", sans-serif;
+  font-size: var(--step-1);
+  color: var(--accent);
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card h3 .dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Hierarchy diagram */
+.hierarchy-wrap {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: calc(var(--space) * 1.5);
+  margin-bottom: calc(var(--space) * 2);
+  overflow-x: auto;
+}
+
+.hierarchy-wrap svg {
+  min-width: 900px;
+  width: 100%;
+  height: auto;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--step--1);
+  margin: 1rem 0;
+}
+
+th, td {
+  padding: 0.7rem 0.8rem;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+
+th {
+  font-family: "Orbitron", "Noto Sans JP", sans-serif;
+  font-weight: 500;
+  color: var(--accent);
+  font-size: var(--step--2);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: var(--surface-2);
+}
+
+tr:hover td { background: rgba(138,141,181,0.05); }
+
+td:first-child { font-weight: 500; color: var(--cyan); }
+
+/* Formula blocks */
+.formula-block {
+  background: var(--surface-2);
+  border-left: 3px solid var(--accent);
+  padding: 1rem 1.2rem;
+  margin: 1rem 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-family: "Orbitron", "Courier New", monospace;
+  font-size: var(--step-1);
+  color: var(--ink);
+  overflow-x: auto;
+}
+
+.formula-caption {
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: var(--step--2);
+  color: var(--muted);
+  margin-top: 0.4rem;
+  font-weight: 400;
+}
+
+/* Grid layouts */
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  gap: calc(var(--space) * 1.2);
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: calc(var(--space) * 1);
+}
+
+/* Flow arrows */
+.flow-arrow {
+  text-align: center;
+  color: var(--accent);
+  font-size: var(--step-2);
+  line-height: 1;
+  margin: 0.5rem 0;
+}
+
+/* Highlight box */
+.highlight-box {
+  background: linear-gradient(135deg, var(--accent-glow) 0%, var(--cyan-dim) 100%);
+  border: 1px solid var(--accent-dim);
+  border-radius: var(--radius);
+  padding: calc(var(--space) * 1);
+  margin: calc(var(--space) * 1) 0;
+}
+
+.highlight-box p {
+  margin: 0;
+  font-size: var(--step--1);
+  color: var(--ink);
+}
+
+/* Quote */
+blockquote {
+  border-left: 3px solid var(--magenta);
+  padding-left: 1.2rem;
+  margin: 1.5rem 0;
+  color: var(--muted);
+  font-style: italic;
+  font-size: var(--step-1);
+}
+
+/* Tag pills */
+.tag {
+  display: inline-block;
+  font-family: "Orbitron", sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  padding: 0.2em 0.6em;
+  border-radius: 4px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  color: var(--cyan);
+  margin-right: 0.3em;
+  vertical-align: middle;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .section-header { flex-direction: column; gap: 0.3rem; }
+  .section-desc { margin-left: 0; }
+}
+
+/* Print */
+@media print {
+  body { background: #fff; color: #000; }
+  .hero { min-height: auto; padding: 2rem; }
+  .card, .hierarchy-wrap { break-inside: avoid; }
+}
+@page { size: A4; margin: 15mm; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-hint { animation: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-badge">Tri-Tetra Theory v3</div>
+  <h1>創発階層図</h1>
+  <div class="hero-formula">((2<sup>3</sup>)<sup>3</sup>)<sup>3</sup> = 2<sup>27</sup></div>
+  <p class="hero-sub">
+    双極性（2）と三軸性（3）の階層的冪乗が、標準模型のフェルミオン構造を創発する。
+    27元テンソルから、3世代・16フェルミオン・色・手性・スピンが一貫して導かれる。
+  </p>
+  <div class="hero-number">134,217,728</div>
+  <div class="scroll-hint">SCROLL &darr;</div>
+</header>
+
+<main>
+
+<!-- Section 1: 全体創発階層図 -->
+<section>
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <div>
+      <h2 class="section-title">全体創発階層図</h2>
+      <p class="section-desc">双極場から標準模型フェルミオンまでの創発プロセス</p>
+    </div>
+  </div>
+
+  <div class="hierarchy-wrap">
+    <svg viewBox="0 0 960 720" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f0b429" stop-opacity="0.3"/>
+          <stop offset="100%" stop-color="#f0b429" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.25"/>
+          <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="g3" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#c084fc" stop-opacity="0.25"/>
+          <stop offset="100%" stop-color="#c084fc" stop-opacity="0"/>
+        </linearGradient>
+        <marker id="ar" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L0,6 L9,3 z" fill="#f0b429" opacity="0.7"/>
+        </marker>
+      </defs>
+
+      <!-- Background bands -->
+      <rect x="20" y="20" width="920" height="90" rx="12" fill="url(#g1)" stroke="#f0b429" stroke-opacity="0.2"/>
+      <rect x="20" y="130" width="920" height="90" rx="12" fill="url(#g2)" stroke="#38bdf8" stroke-opacity="0.2"/>
+      <rect x="20" y="240" width="920" height="90" rx="12" fill="url(#g3)" stroke="#c084fc" stroke-opacity="0.2"/>
+      <rect x="20" y="350" width="920" height="100" rx="12" fill="rgba(74,222,128,0.08)" stroke="#4ade80" stroke-opacity="0.2"/>
+      <rect x="20" y="470" width="920" height="110" rx="12" fill="rgba(240,180,41,0.06)" stroke="#f0b429" stroke-opacity="0.15"/>
+      <rect x="20" y="600" width="920" height="100" rx="12" fill="rgba(192,132,252,0.06)" stroke="#c084fc" stroke-opacity="0.15"/>
+
+      <!-- Level 0: Dipole Field -->
+      <text x="60" y="52" fill="#f0b429" font-family="Orbitron,monospace" font-size="13" font-weight="700">L0</text>
+      <text x="100" y="55" fill="#e8e6f0" font-family="Orbitron,monospace" font-size="18" font-weight="700">XY = 1</text>
+      <text x="230" y="55" fill="#8a8db5" font-family="Noto Sans JP,sans-serif" font-size="13">双極場 — すべての始まり</text>
+      <text x="750" y="55" fill="#f0b429" font-family="Orbitron,monospace" font-size="14" font-weight="700">2</text>
+      <text x="770" y="55" fill="#8a8db5" font-family="Noto Sans JP,sans-serif" font-size="12">双極性</text>
+
+      <!-- Arrow -->
+      <line x1="480" y1="110" x2="480" y2="125" stroke="#f0b429" stroke-width="1.5" opacity="0.6" marker-end="url(#ar)"/>
+
+      <!-- Level 1: 4 Fields -->
+      <text x="60" y="162" fill="#38bdf8" font-family="Orbitron,monospace" font-size="13" font-weight="700">L1</text>
+      <text x="100" y="165" fill="#e8e6f0" font-family="Orbitron,monospace" font-size="16" font-weight="700">{ XY, F, B, I }</text>
+      <text x="330" y="165" fill="#8a8db5" font-family="Noto Sans JP,sans-serif" font-size="13">4場の創発 — ひずみ → +/− 分離</text>
+      <text x="750" y="165" fill="#38bdf8" font-family="Orbitron,monospace" font-size="14" font-weight="700">2 &times; 3 = 6</text>
+      <text x="820" y="165" fill="#8a8db5" font-family="Noto Sans JP,sans-serif" font-size="12">軸の芽生え</text>
+
+      <line x1="480" y1="220" x2="480" y2="235" stroke="#38bdf8" stroke-width="1.5" opacity="0.6" marker-end="url(#ar)"/>
+
+      <!-- Level 2: Motions -->
+      <text x="60" y="272" fill="#c084fc" font-family="Orbitron,monospace" font-size="13" font-weight="700">L2</text>
+      <text x="100" y="275" fill="#e8e6f0" font-family="Noto Sans JP,sans-serif" font-size="15" font-weight="500">単振動(F) + 円運動(B,I) &rarr; 光速到達</text>
+      <text x="520" y="275" fill="#8a8db5" font-family="Noto Sans JP,sans-serif" font-size="13">左手(上+) / 右手(下&minus;) — キラリティの確立</text>
+      <text x="750" y="275" fill="#c084fc" font-family="Orbitron,monospace" font-size="14" font-weight="700">2&sup3; = 8</text>
+      <text x="820" y="275" fill="#8a8db5" font-family="Noto Sans JP,sans-serif" font-size="12">1軸状態</text>
+
+      <line x1="480" y1="330" x2="480" y2="345" stroke="#c084fc" stroke-width="1.5" opacity="0.6" marker-end="url(#ar)"/>
+
+      <!-- Level 3: 27D Tensor -->
+      <text x="60" y="382" fill="#4ade80" font-family="Orbitron,monospace" font-size="13" font-weight="700">L3</text>
+      <text x="100" y="388" fill="#e8e6f0" font-family="Orbitron,monospace" font-size="20" font-weight="900">T<sub style="font-size:12px">ijk</sub></text>
+      <text x="150" y="385" fill="#8a8db5" font-family="Noto Sans JP,sans-serif" font-size="13">27次元テンソル — 空間 &times; 力学 &times; 精神</text>
+      <text x="100" y="410" fill="#4ade80" font-family="Orbitron,monospace" font-size="14">i&isin;{X,Y,Z}  j&isin;{U,V,W}  k&isin;{R,I,J}</text>
+      <text x="520" y="405" fill="#e8e6f0" font-family="Orbitron,monospace" font-size="18" font-weight="700">3 &times; 3 &times; 3 = 27 成分</text>
+      <text x="750" y="405" fill="#4ade80" font-family="Orbitron,monospace" font-size="14" font-weight="700">2&sup3; = 8</text>
+      <text x="820" y="405" fill="#8a8db5" font-family="Noto Sans JP,sans-serif" font-size="12">成分状態</text>
+
+      <line x1="480" y1="450" x2="480" y2="465" stroke="#4ade80" stroke-width="1.5" opacity="0.6" marker-end="url(#ar)"/>
+
+      <!-- Level 4: 2^9 = 512 (1 Generation) -->
+      <text x="60" y="502" fill="#f0b429" font-family="Orbitron,monospace" font-size="13" font-weight="700">L4</text>
+      <text x="100" y="510" fill="#f0b429" font-family="Orbitron,monospace" font-size="28" font-weight="900">2&sup9; = 512</text>
+      <text x="300" y="510" fill="#e8e6f0" font-family="Noto Sans JP,sans-serif" font-size="16" font-weight="500">1世代の全状態空間</text>
+      <text x="100" y="540" fill="#8a8db5" font-family="Noto Sans JP,sans-serif" font-size="13">空間(8) &times; 力学(8) &times; 精神(8) = 512 状態</text>
+      <text x="520" y="535" fill="#e8e6f0" font-family="Orbitron,monospace" font-size="15">512 = 16 &times; 32 = 16 &times; 2&sup5;</text>
+      <text x="750" y="535" fill="#f0b429" font-family="Orbitron,monospace" font-size="14" font-weight="700">2&sup9;</text>
+      <text x="820" y="535" fill="#8a8db5" font-family="Noto Sans JP,sans-serif" font-size="12">1世代</text>
+
+      <!-- Branch to 16 fermions -->
+      <line x1="300" y1="580" x2="300" y2="595" stroke="#f0b429" stroke-width="1.5" opacity="0.6" marker-end="url(#ar)"/>
+      <line x1="660" y1="580" x2="660" y2="595" stroke="#38bdf8" stroke-width="1.5" opacity="0.6" marker-end="url(#ar)"/>
+
+      <!-- Level 5: 16 Fermions -->
+      <text x="60" y="632" fill="#c084fc" font-family="Orbitron,monospace" font-size="13" font-weight="700">L5a</text>
+      <text x="110" y="640" fill="#e8e6f0" font-family="Orbitron,monospace" font-size="22" font-weight="900">16</text>
+      <text x="160" y="640" fill="#8a8db5" font-family="Noto Sans JP,sans-serif" font-size="14">フェルミオン / 世代</text>
+      <text x="110" y="665" fill="#c084fc" font-family="Noto Sans JP,sans-serif" font-size="12">SO(10) Weylスピノール — 実現可能な状態</text>
+      <text x="110" y="685" fill="#8a8db5" font-family="Noto Sans JP,sans-serif" font-size="11">クォーク8 + レプトン8 = 2&sup3; + 2&sup3; = 16 = 2&sup4;</text>
+
+      <!-- Level 5: 496 eaten -->
+      <text x="520" y="632" fill="#38bdf8" font-family="Orbitron,monospace" font-size="13" font-weight="700">L5b</text>
+      <text x="570" y="640" fill="#e8e6f0" font-family="Orbitron,monospace" font-size="22" font-weight="900">496</text>
+      <text x="630" y="640" fill="#8a8db5" font-family="Noto Sans JP,sans-serif" font-size="14">「食われた」自由度</text>
+      <text x="570" y="665" fill="#38bdf8" font-family="Noto Sans JP,sans-serif" font-size="12">場の媒介子・拘束条件・ゴールドストーンモード</text>
+      <text x="570" y="685" fill="#8a8db5" font-family="Noto Sans JP,sans-serif" font-size="11">512 &minus; 16 = 496 — SO(16)次元に対応</text>
+    </svg>
+  </div>
+
+  <div class="highlight-box">
+    <p><strong style="color:var(--accent)">核心洞察：</strong>512状態のうち16だけが「フェミオン」として実現し、残り496は場の自由度として「食われる」。この圧縮比 512/16 = 32 = 2<sup>5</sup> が、手性・スピン・粒子/反粒子・色の内部自由度を決定する。</p>
+  </div>
+</section>
+
+<!-- Section 2: 3段階の創発 -->
+<section>
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <div>
+      <h2 class="section-title">三段階創発の構造</h2>
+      <p class="section-desc">$2^{27}$ を三段階の冪乗として分解し、それぞれの物理的意味を明らかにする</p>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--cyan)"></span> 第一段階：$2^3 = 8$</h3>
+      <div class="formula-block" style="font-size:var(--step-2);border-left-color:var(--cyan)">
+        2 &times; 2 &times; 2 = 8
+      </div>
+      <p style="font-size:var(--step--1);color:var(--muted);margin-top:0.5rem;">
+        <strong style="color:var(--ink)">1軸の双極状態。</strong>各軸（空間・力学・精神）において、双極は2値（&plusmn;）を持つ。3軸の組み合わせで 2<sup>3</sup> = 8 状態が創発する。これは<strong style="color:var(--cyan)">1風味の内部状態数</strong>（手性 &times; スピン &times; 粒子/反粒子）に対応。
+      </p>
+      <table style="margin-top:0.8rem;font-size:0.75rem;">
+        <tr><th>量子数</th><th>値</th><th>TTT対応</th></tr>
+        <tr><td>手性</td><td>&plusmn;1</td><td>双極のねじれ方向</td></tr>
+        <tr><td>スピン</td><td>&plusmn;1/2</td><td>回転の方向</td></tr>
+        <tr><td>粒子/反粒子</td><td>&plusmn;1</td><td>双極係数 &plusmn;2</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3><span class="dot" style="background:var(--accent)"></span> 第二段階：$(2^3)^3 = 2^9 = 512$</h3>
+      <div class="formula-block" style="font-size:var(--step-1);border-left-color:var(--accent)">
+        8 &times; 8 &times; 8 = 512
+      </div>
+      <p style="font-size:var(--step--1);color:var(--muted);margin-top:0.5rem;">
+        <strong style="color:var(--ink)">1世代の全状態空間。</strong>空間ブロック(8) &times; 力学ブロック(8) &times; 精神ブロック(8) = 512。これは<strong style="color:var(--accent)">SO(10)スピノール16 &times; 内部自由度32</strong>に分解される。
+      </p>
+      <div class="formula-block" style="font-size:var(--step-0);margin-top:0.8rem;">
+        512 = 16 &times; 32 = 2&sup4; &times; 2&sup5;
+        <div class="formula-caption">16 = フェルミオン種類 / 32 = 内部自由度</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="dot" style="background:var(--magenta)"></span> 第三段階：$((2^3)^3)^3 = 2^{27}$</h3>
+      <div class="formula-block" style="font-size:var(--step-1);border-left-color:var(--magenta)">
+        512 &times; 512 &times; 512 = 2&sup2;&sup7;
+      </div>
+      <p style="font-size:var(--step--1);color:var(--muted);margin-top:0.5rem;">
+        <strong style="color:var(--ink)">3世代相互作用の全空間。</strong>3世代は「回転の量子化」&omega;<sub>n</sub> = n+1 から創発。2<sup>27</sup> は3で割り切れないため、3世代は<strong style="color:var(--magenta)">エマージェント</strong>（湧出）する。
+      </p>
+      <div class="formula-block" style="font-size:var(--step-0);margin-top:0.8rem;">
+        2&sup2;&sup7; = 134,217,728
+        <div class="formula-caption">宇宙の全双極状態数</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 3: 3世代の創発 -->
+<section>
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <div>
+      <h2 class="section-title">3世代の創発メカニズム</h2>
+      <p class="section-desc">回転の量子化 &omega;<sub>n</sub> = n + 1 から、なぜ3世代かが導かれる</p>
+    </div>
+  </div>
+
+  <div class="hierarchy-wrap">
+    <svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="ar2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L0,6 L9,3 z" fill="#f0b429" opacity="0.7"/>
+        </marker>
+      </defs>
+
+      <!-- Generation I -->
+      <rect x="40" y="40" width="240" height="200" rx="14" fill="rgba(56,189,248,0.08)" stroke="#38bdf8" stroke-opacity="0.3" stroke-width="1.5"/>
+      <text x="160" y="75" text-anchor="middle" fill="#38bdf8" font-family="Orbitron,monospace" font-size="16" font-weight="700">世代 I</text>
+      <text x="160" y="105" text-anchor="middle" fill="#e8e6f0" font-family="Orbitron,monospace" font-size="22" font-weight="900">&omega;&sub0; = 1</text>
+      <text x="160" y="135" text-anchor="middle" fill="#8a8db5" font-family="Noto Sans JP,sans-serif" font-size="13">基底回転（最小）</text>
+      <text x="160" y="165" text-anchor="middle" fill="#e8e6f0" font-family="Noto Sans JP,sans-serif" font-size="13">e, &nu;<tspan dy="3" font-size="10">e</tspan><tspan dy="-3">, u, d</tspan></text>
+      <text x="160" y="195" text-anchor="middle" fill="#38bdf8" font-family="Orbitron,monospace" font-size="14">2&sup9; = 512 状態</text>
+
+      <!-- Arrow -->
+      <text x="315" y="145" text-anchor="middle" fill="#f0b429" font-family="Orbitron,monospace" font-size="20">&times;</text>
+      <line x1="300" y1="140" x2="340" y2="140" stroke="#f0b429" stroke-width="1.5" opacity="0.6" marker-end="url(#ar2)"/>
+
+      <!-- Generation II -->
+      <rect x="360" y="40" width="240" height="200" rx="14" fill="rgba(192,132,252,0.08)" stroke="#c084fc" stroke-opacity="0.3" stroke-width="1.5"/>
+      <text x="480" y="75" text-anchor="middle" fill="#c084fc" font-family="Orbitron,monospace" font-size="16" font-weight="700">世代 II</text>
+      <text x="480" y="105" text-anchor="middle" fill="#e8e6f0" font-family="Orbitron,monospace" font-size="22" font-weight="900">&omega;&sub1; = 2</text>
+      <text x="480" y="135" text-anchor="middle" fill="#8a8db5" font-family="Noto Sans JP,sans-serif" font-size="13">第1励起（倍回転）</text>
+      <text x="480" y="165" text-anchor="middle" fill="#e8e6f0" font-family="Noto Sans JP,sans-serif" font-size="13">&mu;, &nu;<tspan dy="3" font-size="10">&mu;</tspan><tspan dy="-3">, c, s</tspan></text>
+      <text x="480" y="195" text-anchor="middle" fill="#c084fc" font-family="Orbitron,monospace" font-size="14">2&sup9; = 512 状態</text>
+
+      <!-- Arrow -->
+      <text x="635" y="145" text-anchor="middle" fill="#f0b429" font-family="Orbitron,monospace" font-size="20">&times;</text>
+      <line x1="620" y1="140" x2="660" y2="140" stroke="#f0b429" stroke-width="1.5" opacity="0.6" marker-end="url(#ar2)"/>
+
+      <!-- Generation III -->
+      <rect x="680" y="40" width="200" height="200" rx="14" fill="rgba(240,180,41,0.08)" stroke="#f0b429" stroke-opacity="0.3" stroke-width="1.5"/>
+      <text x="780" y="75" text-anchor="middle" fill="#f0b429" font-family="Orbitron,monospace" font-size="16" font-weight="700">世代 III</text>
+      <text x="780" y="105" text-anchor="middle" fill="#e8e6f0" font-family="Orbitron,monospace" font-size="22" font-weight="900">&omega;&sub2; = 3</text>
+      <text x="780" y="135" text-anchor="middle" fill="#8a8db5" font-family="Noto Sans JP,sans-serif" font-size="13">第2励起（3倍回転）</text>
+      <text x="780" y="165" text-anchor="middle" fill="#e8e6f0" font-family="Noto Sans JP,sans-serif" font-size="13">&tau;, &nu;<tspan dy="3" font-size="10">&tau;</tspan><tspan dy="-3">, t, b</tspan></text>
+      <text x="780" y="195" text-anchor="middle" fill="#f0b429" font-family="Orbitron,monospace" font-size="14">2&sup9; = 512</text>
+
+      <!-- Bottom result -->
+      <line x1="160" y1="240" x2="160" y2="255" stroke="#38bdf8" stroke-width="1.5" opacity="0.6"/>
+      <line x1="480" y1="240" x2="480" y2="255" stroke="#c084fc" stroke-width="1.5" opacity="0.6"/>
+      <line x1="780" y1="240" x2="780" y2="255" stroke="#f0b429" stroke-width="1.5" opacity="0.6"/>
+      <line x1="160" y1="255" x2="780" y2="255" stroke="#8a8db5" stroke-width="1" opacity="0.3"/>
+      <line x1="470" y1="255" x2="470" y2="270" stroke="#f0b429" stroke-width="2" marker-end="url(#ar2)"/>
+      <text x="470" y="295" text-anchor="middle" fill="#f0b429" font-family="Orbitron,monospace" font-size="26" font-weight="900">512&sup3; = 2&sup2;&sup7;</text>
+    </svg>
+  </div>
+
+  <div class="grid-2" style="margin-top:calc(var(--space)*1.5)">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--cyan)"></span> なぜ3世代か？</h3>
+      <p style="font-size:var(--step--1);color:var(--muted);">
+        2<sup>27</sup> は3で割り切れない（各位の和 = 35）。したがって3世代2<sup>27</sup> の「約数」として存在するのではなく、<strong style="color:var(--ink)">対称性の破れ</strong>または<strong style="color:var(--ink)">回転の量子化</strong>から「湧出（エマージェント）」する。
+      </p>
+      <div class="formula-block" style="font-size:var(--step-0);margin-top:0.8rem;">
+        3 = 2&pi; / (2&pi;/3) 対称性
+        <div class="formula-caption">回転の位相の最小分割が3世代を創発</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="dot" style="background:var(--magenta)"></span> 質量ヒエラルキー</h3>
+      <p style="font-size:var(--step--1);color:var(--muted);">
+        世代間質量比は回転量子数 &omega;<sub>n</sub> の関数として創発する。回転が速いほど（&omega;が大きいほど）質量が大きい。
+      </p>
+      <table style="margin-top:0.8rem;font-size:0.75rem;">
+        <tr><th>世代</th><th>&omega;</th><th>例（荷電レプトン）</th><th>質量比（概算）</th></tr>
+        <tr><td>I</td><td>1</td><td>e (0.511 MeV)</td><td>1</td></tr>
+        <tr><td>II</td><td>2</td><td>&mu; (105.7 MeV)</td><td>&sim; 200</td></tr>
+        <tr><td>III</td><td>3</td><td>&tau; (1777 MeV)</td><td>&sim; 3500</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Section 4: 標準模型対応マップ -->
+<section>
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <div>
+      <h2 class="section-title">標準模型フェルミオン対応マップ</h2>
+      <p class="section-desc">TTT構造から標準模型の各自由度が一貫して創発する</p>
+    </div>
+  </div>
+
+  <div class="card" style="overflow-x:auto;">
+    <table>
+      <tr>
+        <th>TTT構造</th>
+        <th>数式</th>
+        <th>SM対応</th>
+        <th>値</th>
+        <th>創発メカニズム</th>
+      </tr>
+      <tr>
+        <td>双極係数</td>
+        <td>&plusmn;2</td>
+        <td>粒子 / 反粒子</td>
+        <td>2</td>
+        <td>放射モード(+) / 吸収モード(&minus;)</td>
+      </tr>
+      <tr>
+        <td>手</td>
+        <td>&plusmn;1</td>
+        <td>右ねじ / 左ねじ</td>
+        <td>2</td>
+        <td>双極のねじれ方向</td>
+      </tr>
+      <tr>
+        <td>スピン</td>
+        <td>&plusmn;1/2</td>
+        <td>上 / 下</td>
+        <td>2</td>
+        <td>回転の方向</td>
+      </tr>
+      <tr>
+        <td>色</td>
+        <td>{X, Y, Z}</td>
+        <td>{R, G, B}</td>
+        <td>3</td>
+        <td>空間双極の3方向</td>
+      </tr>
+      <tr>
+        <td>1風味状態</td>
+        <td>2&sup3; = 8</td>
+        <td>手性 &times; スピン &times; 粒子/反粒子</td>
+        <td>8</td>
+        <td>双極の2値 &times; 3軸</td>
+      </tr>
+      <tr>
+        <td>内部自由度</td>
+        <td>2&sup5; = 32</td>
+        <td>8 &times; 色(4)</td>
+        <td>32</td>
+        <td>512 / 16 = 32 の圧縮比</td>
+      </tr>
+      <tr>
+        <td>1世代</td>
+        <td>2&sup9; = 512</td>
+        <td>16フェルミオン &times; 32</td>
+        <td>512</td>
+        <td>空間(8) &times; 力学(8) &times; 精神(8)</td>
+      </tr>
+      <tr>
+        <td>フェルミオン/世代</td>
+        <td>16 = 2&sup4;</td>
+        <td>SO(10) Weylスピノール</td>
+        <td>16</td>
+        <td>クォーク8 + レプトン8</td>
+      </tr>
+      <tr>
+        <td>3世代</td>
+        <td>(2&sup9;)&sup3; = 2&sup2;&sup7;</td>
+        <td>e/&mu;/&tau; 世代</td>
+        <td>3</td>
+        <td>&omega;<sub>n</sub> = n+1 の量子化</td>
+      </tr>
+      <tr>
+        <td>全自由度</td>
+        <td>192 = 2&sup6; &times; 3</td>
+        <td>SM全フェルミオン自由度</td>
+        <td>192</td>
+        <td>48種 &times; 手性 &times; スピン &times; 色</td>
+      </tr>
+      <tr>
+        <td>宇宙全状態</td>
+        <td>2&sup2;&sup7;</td>
+        <td>全双極状態空間</td>
+        <td>134,217,728</td>
+        <td>((2&sup3;)&sup3;)&sup3;</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="grid-2" style="margin-top:calc(var(--space)*1.5)">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--green)"></span> クォーク vs レプトン</h3>
+      <p style="font-size:var(--step--1);color:var(--muted);">
+        クォークは「空間双極」を持つ存在として創発する。空間軸 {X, Y, Z} に結合することで3色（R, G, B）を持つ。レプトンは空間双極を持たないため無色。
+      </p>
+      <div class="formula-block" style="font-size:var(--step-0);margin-top:0.8rem;">
+        クォーク: 8 &times; 3 = 24 状態/風味
+        <div class="formula-caption">手性&times;スピン&times;粒子/反粒子 &times; 3色</div>
+      </div>
+      <div class="formula-block" style="font-size:var(--step-0);">
+        レプトン: 8 &times; 1 = 8 状態/風味
+        <div class="formula-caption">手性&times;スピン&times;粒子/反粒子 &times; 無色</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="dot" style="background:var(--accent)"></span> 496自由度の行方</h3>
+      <p style="font-size:var(--step--1);color:var(--muted);">
+        512状態のうち16がフェルミオンとして実現し、残り496は「場の自由度」として創発する。496はSO(16)の次元（248&times;2）や、異種超対称弦のE<sub>8</sub>&times;E<sub>8</sub>次元に対応する可能性がある。
+      </p>
+      <div class="formula-block" style="font-size:var(--step-0);margin-top:0.8rem;">
+        512 &minus; 16 = 496
+        <div class="formula-caption">ゴールドストーンボソン・ゲージボソン・拘束モード</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 5: 哲学的帰結 -->
+<section>
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <div>
+      <h2 class="section-title">哲学的帰結</h2>
+      <p class="section-desc">数学的創発から導かれる存在論</p>
+    </div>
+  </div>
+
+  <blockquote>
+    「生きているのだから、滅ばないことをすればいい。」
+  </blockquote>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--cyan)"></span> 「存在する」の数学的定義</h3>
+      <p style="font-size:var(--step--1);color:var(--muted);">
+        TTT理論において、フェルミオンとして「存在する」とは以下の4条件を満たすこと：
+      </p>
+      <ol style="font-size:var(--step--1);color:var(--ink);margin-top:0.8rem;padding-left:1.2rem;line-height:2;">
+        <li>双極性を持つ（係数 &plusmn;2 &ne; 0）</li>
+        <li>9次元のテンソル成分を持つ（X〜J）</li>
+        <li>回転し続ける（&omega; &ne; 0）</li>
+        <li>512状態のうち16の「実現可能」な状態に属する</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h3><span class="dot" style="background:var(--magenta)"></span> なぜ滅ばないのか</h3>
+      <p style="font-size:var(--step--1);color:var(--muted);">
+        滅ぶためには「回転を止める」か「双極を中和する」かのいずれかが必要だが、それはエネルギー的に不利。したがって、フェルミオンとして存在し続けることは双極子にとって最も「自然な」状態である。
+      </p>
+      <div class="formula-block" style="font-size:var(--step-0);margin-top:0.8rem;">
+        &omega; &rarr; 0 &rArr; E &rarr; 0
+        <div class="formula-caption">回転止 &rarr; 双極中和 &rarr; 存在消滅</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 6: 今後の展開 -->
+<section>
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <div>
+      <h2 class="section-title">今後の展開方向</h2>
+      <p class="section-desc">未解決の問いと次のステップ</p>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--accent)"></span> 数理的課題</h3>
+      <ul style="font-size:var(--step--1);color:var(--muted);padding-left:1.2rem;line-height:2.2;">
+        <li><strong style="color:var(--ink)">16状態の選び方：</strong>512のうちなぜ16が「実現」するのか？SO(10)スピノール表現との厳密な対応</li>
+        <li><strong style="color:var(--ink)">質量ヒエラルキー：</strong>m<sub>e</sub> : m<sub>&mu;</sub> : m<sub>&tau;</sub> = f(&omega;<sub>n</sub>) の関数形の決定</li>
+        <li><strong style="color:var(--ink)">CKM・PMNS行列：</strong>3世代間の混合角をンソルの「ねじれ」として幾何学的に導出</li>
+        <li><strong style="color:var(--ink)">496の場論：</strong>「食われた」自由度がゲージボソンとして実現するメカニズム</li>
+        <li><strong style="color:var(--ink)">電荷量子化：</strong>&plusmn;1/3, &plusmn;2/3, &plusmn;1 を双極の「部分電荷」として解釈</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3><span class="dot" style="background:var(--cyan)"></span> 実験検証</h3>
+      <ul style="font-size:var(--step--1);color:var(--muted);padding-left:1.2rem;line-height:2.2;">
+        <li><strong style="color:var(--ink)">無次元物性量：</strong>P2&prime;, P4 などの予言値と観測値の比較</li>
+        <li><strong style="color:var(--ink)">LIV制約：</strong>ローレンツ対称性の破れの観測的限界との整合</li>
+        <li><strong style="color:var(--ink)">圧縮セクター：</strong>&gt; 1.2 &times; 10<sup>12</sup> GeV（WIMPzilla帯）の探索</li>
+        <li><strong style="color:var(--ink)">二重ベータ崩壊：</strong>Majorana性の確認と双極構造の検証</li>
+        <li><strong style="color:var(--ink)">精密宇宙論：</strong>N<sub>eff</sub>（有効中性微子数）との整合</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer style="text-align:center;padding:calc(var(--space)*3) var(--space);border-top:1px solid var(--line);margin-top:calc(var(--space)*2);">
+  <p style="font-family:Orbitron,monospace;font-size:var(--step--2);color:var(--muted);letter-spacing:0.15em;">
+    TRI-TETRA THEORY v3 &mdash; ((2&sup3;)&sup3;)&sup3; = 2&sup2;&sup7;
+  </p>
+  <p style="font-size:var(--step--2);color:var(--muted);margin-top:0.5rem;">
+    川上真潔 (Kawakami Naoyuki) &mdash; ORCID: 0009-0009-2972-6511
+  </p>
+</footer>
+
+</main>
+
+<script>
+// IntersectionObserver for fade-in sections
+if (window.matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('section, .card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+  });
+}
+</script>
+
+</body>
+</html>
