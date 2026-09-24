@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TTT 創発階層図（修正版）— SO(18)スピノールと標準模型の対応</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e27;
+  --surface: #11183a;
+  --surface-2: #1a2348;
+  --ink: #e8e6f0;
+  --muted: #8a8db5;
+  --accent: #f0b429;
+  --accent-dim: color-mix(in oklab, var(--accent) 30%, var(--bg));
+  --accent-glow: color-mix(in oklab, var(--accent) 15%, transparent);
+  --line: rgba(138, 141, 181, 0.18);
+  --cyan: #38bdf8;
+  --cyan-dim: color-mix(in oklab, var(--cyan) 20%, transparent);
+  --magenta: #c084fc;
+  --magenta-dim: color-mix(in oklab, var(--magenta) 20%, transparent);
+  --green: #4ade80;
+  --green-dim: color-mix(in oklab, var(--green) 20%, transparent);
+  --red: #f87171;
+  --step--2: clamp(0.75rem, 0.7rem + 0.2vw, 0.875rem);
+  --step--1: clamp(0.875rem, 0.8rem + 0.3vw, 1rem);
+  --step-0: clamp(1rem, 0.9rem + 0.4vw, 1.125rem);
+  --step-1: clamp(1.2rem, 1rem + 0.8vw, 1.6rem);
+  --step-2: clamp(1.6rem, 1.2rem + 1.5vw, 2.4rem);
+  --step-3: clamp(2.2rem, 1.5rem + 2.5vw, 3.5rem);
+  --step-4: clamp(3rem, 2rem + 4vw, 5rem);
+  --space: clamp(1rem, 0.7rem + 1.2vw, 2rem);
+  --radius: 16px;
+  --shadow: 0 2px 4px rgba(0,0,0,0.3), 0 12px 32px -8px rgba(0,0,0,0.5);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; }
+
+body {
+  font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.85;
+  font-size: var(--step-0);
+  overflow-x: hidden;
+}
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space);
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 20%, rgba(192,132,252,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 80%, rgba(56,189,248,0.06) 0%, transparent 50%),
+    var(--bg);
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.025'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-block;
+  font-family: "Orbitron", sans-serif;
+  font-size: var(--step--2);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid var(--accent-dim);
+  padding: 0.4em 1.2em;
+  border-radius: 999px;
+  margin-bottom: calc(var(--space) * 1.5);
+  background: var(--accent-glow);
+}
+
+.hero h1 {
+  font-family: "Orbitron", "Noto Sans JP", sans-serif;
+  font-size: var(--step-4);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: calc(var(--space) * 0.8);
+  background: linear-gradient(135deg, var(--ink) 0%, var(--accent) 60%, var(--cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-formula {
+  font-family: "Orbitron", monospace;
+  font-size: var(--step-2);
+  color: var(--accent);
+  letter-spacing: 0.05em;
+  margin-bottom: calc(var(--space) * 0.5);
+}
+
+.hero-sub {
+  font-size: var(--step-1);
+  color: var(--muted);
+  max-width: 56ch;
+  margin: 0 auto calc(var(--space) * 2);
+  font-weight: 300;
+}
+
+.hero-number {
+  font-family: "Orbitron", monospace;
+  font-size: var(--step-3);
+  color: var(--cyan);
+  letter-spacing: 0.03em;
+  margin-top: calc(var(--space) * 0.5);
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: calc(var(--space) * 2);
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--muted);
+  font-size: var(--step--2);
+  letter-spacing: 0.1em;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+main { max-width: 1200px; margin: 0 auto; padding: 0 var(--space); }
+
+section {
+  margin-bottom: calc(var(--space) * 4);
+  position: relative;
+}
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: calc(var(--space) * 1.5);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 0.8rem;
+}
+
+.section-num {
+  font-family: "Orbitron", sans-serif;
+  font-size: var(--step-3);
+  font-weight: 700;
+  color: var(--accent);
+  opacity: 0.5;
+  line-height: 1;
+}
+
+.section-title {
+  font-family: "Orbitron", "Noto Sans JP", sans-serif;
+  font-size: var(--step-2);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.section-desc {
+  color: var(--muted);
+  font-size: var(--step--1);
+  margin-top: 0.3rem;
+  margin-left: calc(var(--step-3) + 1rem);
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: calc(var(--space) * 1.2);
+  box-shadow: var(--shadow);
+}
+
+.card h3 {
+  font-family: "Orbitron", "Noto Sans JP", sans-serif;
+  font-size: var(--step-1);
+  color: var(--accent);
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card h3 .dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.hierarchy-wrap {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: calc(var(--space) * 1.5);
+  margin-bottom: calc(var(--space) * 2);
+  overflow-x: auto;
+}
+
+.hierarchy-wrap svg {
+  min-width: 900px;
+  width: 100%;
+  height: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--step--1);
+  margin: 1rem 0;
+}
+
+th, td {
+  padding: 0.7rem 0.8rem;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+
+th {
+  font-family: "Orbitron", "Noto Sans JP", sans-serif;
+  font-weight: 500;
+  color: var(--accent);
+  font-size: var(--step--2);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: var(--surface-2);
+}
+
+tr:hover td { background: rgba(138,141,181,0.05); }
+
+td:first-child { font-weight: 500; color: var(--cyan); }
+
+.formula-block {
+  background: var(--surface-2);
+  border-left: 3px solid var(--accent);
+  padding: 1rem 1.2rem;
+  margin: 1rem 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-family: "Orbitron", "Courier New", monospace;
+  font-size: var(--step-1);
+  color: var(--ink);
+  overflow-x: auto;
+}
+
+.formula-caption {
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: var(--step--2);
+  color: var(--muted);
+  margin-top: 0.4rem;
+  font-weight: 400;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  gap: calc(var(--space) * 1.2);
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: calc(var(--space) * 1);
+}
+
+.highlight-box {
+  background: linear-gradient(135deg, var(--accent-glow) 0%, var(--cyan-dim) 100%);
+  border: 1px solid var(--accent-dim);
+  border-radius: var(--radius);
+  padding: calc(var(--space) * 1);
+  margin: calc(var(--space) * 1) 0;
+}
+
+.highlight-box p {
+  margin: 0;
+  font-size: var(--step--1);
+  color: var(--ink);
+}
+
+.correction-box {
+  background: rgba(248, 113, 113, 0.08);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  border-radius: var(--radius);
+  padding: calc(var(--space) * 0.8);
+  margin: 0.8rem 0;
+}
+
+.correction-box p {
+  margin: 0;
+  font-size: var(--step--1);
+  color: var(--red);
+}
+
+blockquote {
+  border-left: 3px solid var(--magenta);
+  padding-left: 1.2rem;
+  margin: 1.5rem 0;
+  color: var(--muted);
+  font-style: italic;
+  font-size: var(--step-1);
+}
+
+.tag {
+  display: inline-block;
+  font-family: "Orbitron", sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  padding: 0.2em 0.6em;
+  border-radius: 4px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  color: var(--cyan);
+  margin-right: 0.3em;
+  vertical-align: middle;
+}
+
+@media (max-width: 640px) {
+  .section-header { flex-direction: column; gap: 0.3rem; }
+  .section-desc { margin-left: 0; }
+}
+
+@media print {
+  body { background: #fff; color: #000; }
+  .hero { min-height: auto; padding: 2rem; }
+  .card, .hierarchy-wrap { break-inside: avoid; }
+}
+@page { size: A4; margin: 15mm; }
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-hint { animation: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-badge">Tri-Tetra Theory v3 &mdash; 修正版</div>
+  <h1>創発階層図</h1>
+  <div class="hero-formula">SO(18) スピノール 512 &rarr; SO(10) &times; SO(8)</div>
+  <p class="hero-sub">
+    9つの双極モードは SO(18) のスピノールそのもの。<br>
+    SO(18) &sup; SO(10) &times; SO(8) から標準模型のフェルミオン構造が創発する。
+  </p>
+  <div class="hero-number">2&sup9; = 512 &rarr; 256 = (16, 8<sub>s</sub>) + (16̄, 8<sub>c</sub>)</div>
+  <div class="scroll-hint">SCROLL &darr;</div>
+</header>
+
+<main>
+
+<!-- Section 1: Core Insight -->
+<section>
+  <div class="section-header">
+    <span class="section-num">00</span>
+    <div>
+      <h2 class="section-title">核心洞察：9モード &rarr; SO(18) スピノール</h2>
+      <p class="section-desc">TTTの9成分（X〜J）がそれぞれ &plusmn; を持つ構成は、標準的な数学的構造と一致する</p>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <p><strong style="color:var(--accent)">定理：</strong>n 個のフェルミオン的モードのフォック空間 = SO(2n) のスピノール。TTTの9成分（X,Y,Z,U,V,W,R,I,J）がそれぞれ &plusmn; を持つことは、<strong style="color:var(--ink)">n = 9 のフェルミオン的モード</strong>として解釈できる。したがって：</p>
+  </div>
+
+  <div class="formula-block" style="font-size:var(--step-2); text-align:center;">
+    9モード &rArr; SO(18) ディラック・スピノール = 2&sup9; = 512
+    <div class="formula-caption">SO(18) ワイル・スピノール = 2&sup8; = 256</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--cyan)"></span> SO(2n) スピノールの標準的構造</h3>
+      <table style="font-size:0.75rem;">
+        <tr><th>群</th><th>ディラック</th><th>ワイル</th><th>次元公式</th></tr>
+        <tr><td>SO(10)</td><td>2&sup5; = 32</td><td>2&sup4; = 16</td><td>n=5</td></tr>
+        <tr><td>SO(16)</td><td>2&sup8; = 256</td><td>2&sup7; = 128</td><td>n=8</td></tr>
+        <tr><td style="color:var(--accent)"><strong>SO(18)</strong></td><td style="color:var(--accent)"><strong>2&sup9; = 512</strong></td><td style="color:var(--accent)"><strong>2&sup8; = 256</strong></td><td style="color:var(--accent)"><strong>n=9</strong></td></tr>
+        <tr><td>SO(32)</td><td>2&sup1;&sup6; = 65536</td><td>2&sup1;&sup5; = 32768</td><td>n=16</td></tr>
+      </table>
+      <p style="font-size:var(--step--2);color:var(--muted);margin-top:0.5rem;">
+        SO(2n) のディラック・スピノールの次元は常に 2&supn; 。TTTの 2&sup9; = 512 は SO(18) のスピノール次元と完全に一致する。
+      </p>
+    </div>
+
+    <div class="card">
+      <h3><span class="dot" style="background:var(--magenta)"></span> 9モードの対応</h3>
+      <table style="font-size:0.75rem;">
+        <tr><th>TTT成分</th><th>モード</th><th>双極値</th></tr>
+        <tr><td>X, Y, Z</td><td>空間3軸</td><td>&plusmn;</td></tr>
+        <tr><td>U, V, W</td><td>力学3軸</td><td>&plusmn;</td></tr>
+        <tr><td>R, I, J</td><td>精神3軸</td><td>&plusmn;</td></tr>
+        <tr><td style="color:var(--accent)"><strong>合計</strong></td><td style="color:var(--accent)"><strong>9モード</strong></td><td style="color:var(--accent)"><strong>2&sup9; = 512</strong></td></tr>
+      </table>
+      <p style="font-size:var(--step--2);color:var(--muted);margin-top:0.5rem;">
+        各成分が &plusmn; を持つことは、フェルミオン的生成・消滅演算子の代数と同型。9モード &rarr; SO(18) は偶然ではなく、構造必然。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Section 2: SO(18) ⊃ SO(10) × SO(8) decomposition -->
+<section>
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <div>
+      <h2 class="section-title">SO(18) &sup; SO(10) &times; SO(8) の分解</h2>
+      <p class="section-desc">256 = (16, 8<sub>s</sub>) + (16̄, 8<sub>c</sub>) — 標準模型の世代構造が創発する</p>
+    </div>
+  </div>
+
+  <div class="formula-block" style="font-size:var(--step-2); text-align:center;">
+    SO(18) &sup; SO(10) &times; SO(8)
+    <div class="formula-caption" style="font-size:var(--step-0);">256 = (16, 8<sub>s</sub>) + (16̄, 8<sub>c</sub>)</div>
+  </div>
+
+  <div class="hierarchy-wrap">
+    <svg viewBox="0 0 900 380" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="ar" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L0,6 L9,3 z" fill="#f0b429" opacity="0.7"/>
+        </marker>
+      </defs>
+
+      <!-- SO(18) -->
+      <rect x="300" y="20" width="300" height="80" rx="14" fill="rgba(240,180,41,0.08)" stroke="#f0b429" stroke-opacity="0.4" stroke-width="2"/>
+      <text x="450" y="55" text-anchor="middle" fill="#f0b429" font-family="Orbitron,monospace" font-size="20" font-weight="900">SO(18)</text>
+      <text x="450" y="80" text-anchor="middle" fill="#8a8db5" font-family="Noto Sans JP,sans-serif" font-size="13">ワイル・スピノール = 256</text>
+
+      <!-- Arrow down -->
+      <line x1="450" y1="100" x2="450" y2="125" stroke="#f0b429" stroke-width="2" marker-end="url(#ar)"/>
+      <text x="460" y="118" fill="#f0b429" font-family="Orbitron,monospace" font-size="12">&sup;</text>
+
+      <!-- Branching -->
+      <line x1="450" y1="140" x2="200" y2="170" stroke="#8a8db5" stroke-width="1.5" opacity="0.5"/>
+      <line x1="450" y1="140" x2="700" y2="170" stroke="#8a8db5" stroke-width="1.5" opacity="0.5"/>
+
+      <!-- SO(10) block -->
+      <rect x="50" y="170" width="300" height="120" rx="14" fill="rgba(56,189,248,0.08)" stroke="#38bdf8" stroke-opacity="0.4" stroke-width="1.5"/>
+      <text x="200" y="200" text-anchor="middle" fill="#38bdf8" font-family="Orbitron,monospace" font-size="18" font-weight="700">SO(10)</text>
+      <text x="200" y="228" text-anchor="middle" fill="#e8e6f0" font-family="Orbitron,monospace" font-size="16">ワイル = 16</text>
+      <text x="200" y="252" text-anchor="middle" fill="#8a8db5" font-family="Noto Sans JP,sans-serif" font-size="12">1世代のフェルミオン</text>
+      <text x="200" y="275" text-anchor="middle" fill="#8a8db5" font-family="Noto Sans JP,sans-serif" font-size="11">Q(6) + u&supc;(3) + d&supc;(3) + L(2) + e&supc;(1) + &nu;&supc;(1) = 16</text>
+
+      <!-- SO(8) block -->
+      <rect x="550" y="170" width="300" height="120" rx="14" fill="rgba(192,132,252,0.08)" stroke="#c084fc" stroke-opacity="0.4" stroke-width="1.5"/>
+      <text x="700" y="200" text-anchor="middle" fill="#c084fc" font-family="Orbitron,monospace" font-size="18" font-weight="700">SO(8)</text>
+      <text x="700" y="228" text-anchor="middle" fill="#e8e6f0" font-family="Orbitron,monospace" font-size="16">8<sub>s</sub> + 8<sub>c</sub> = 16</text>
+      <text x="700" y="252" text-anchor="middle" fill="#8a8db5" font-family="Noto Sans JP,sans-serif" font-size="12">トライアリティ：8<sub>v</sub> , 8<sub>s</sub> , 8<sub>c</sub></text>
+      <text x="700" y="275" text-anchor="middle" fill="#8a8db5" font-family="Noto Sans JP,sans-serif" font-size="11">「世代の多重度」または「鏡像世代」</text>
+
+      <!-- Bottom decomposition -->
+      <line x1="200" y1="290" x2="200" y2="310" stroke="#38bdf8" stroke-width="1.5" opacity="0.6"/>
+      <line x1="700" y1="290" x2="700" y2="310" stroke="#c084fc" stroke-width="1.5" opacity="0.6"/>
+      <line x1="200" y1="310" x2="700" y2="310" stroke="#8a8db5" stroke-width="1" opacity="0.3"/>
+      <line x1="450" y1="310" x2="450" y2="330" stroke="#f0b429" stroke-width="2" marker-end="url(#ar)"/>
+
+      <text x="450" y="360" text-anchor="middle" fill="#f0b429" font-family="Orbitron,monospace" font-size="22" font-weight="900">256 = (16, 8<sub>s</sub>) + (16̄, 8<sub>c</sub>)</text>
+    </svg>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--cyan)"></span> (16, 8<sub>s</sub>) = 128 の意味</h3>
+      <p style="font-size:var(--step--1);color:var(--muted);">
+        SO(10) の 16（1世代のフェルミオン）が SO(8) の実スピノール 8<sub>s</sub> と結合して 128 状態を形成。8<sub>s</sub> は<strong style="color:var(--ink)">「世代の多重度」</strong>として解釈できる。16 &times; 8 = 128 は、SO(10) の1世代が8つの「複製」を持つことを示唆する。
+      </p>
+      <div class="formula-block" style="font-size:var(--step-0);margin-top:0.8rem;">
+        16 &times; 8<sub>s</sub> = 128
+        <div class="formula-caption">「通常の」世代構造（8つの多重度）</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="dot" style="background:var(--magenta)"></span> (16̄, 8<sub>c</sub>) = 128 の意味</h3>
+      <p style="font-size:var(--step--1);color:var(--muted);">
+        16̄ は SO(10) の鏡像（charge-conjugate）スピノール。8<sub>c</sub> は SO(8) のもう一つの実スピノール（トライアリティの別枝）。これは<strong style="color:var(--ink)">鏡像世代</strong>または<strong style="color:var(--ink)">暗黒セクター</strong>の候補として解釈できる。
+      </p>
+      <div class="formula-block" style="font-size:var(--step-0);margin-top:0.8rem;">
+        16̄ &times; 8<sub>c</sub> = 128
+        <div class="formula-caption">鏡像世代または暗黒セクター（8つの多重度）</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <p><strong style="color:var(--accent)">重要：</strong>256 = 128 + 128 の分解は、標準模型の「3世代」ではなく、<strong style="color:var(--ink)">最大8世代（+ 鏡像8世代）</strong>の構造を示唆する。実際に観測される3世代は、この8つの多重度のうち3つだけが「質量を獲得」し、残りが重く（または質量が極めて大きく）なった結果として創発する可能性がある。</p>
+  </div>
+</section>
+
+<!-- Section 3: SO(10) 16 の正しい分解 -->
+<section>
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <div>
+      <h2 class="section-title">SO(10) の 16 の正しい分解</h2>
+      <p class="section-desc">クォーク12 + レプトン4 — 前回の「クォーク8 + レプトン8」は誤り</p>
+    </div>
+  </div>
+
+  <div class="correction-box">
+    <p><strong>前回の誤り：</strong>「16 = クォーク8 + レプトン8」は完全に誤り。SO(10) の 16 は SU(5) &times; U(1) または SU(4) &times; SU(2) &times; SU(2) への分解に基づく。</p>
+  </div>
+
+  <div class="card" style="overflow-x:auto;">
+    <table>
+      <tr>
+        <th>成分</th>
+        <th>SM名称</th>
+        <th>ゲージ量子数</th>
+        <th>色</th>
+        <th>個数</th>
+        <th>説明</th>
+      </tr>
+      <tr>
+        <td>Q</td>
+        <td>左手クォーク二重態</td>
+        <td>(3, 2, +1/6)</td>
+        <td>3</td>
+        <td style="color:var(--accent)">6</td>
+        <td>u<sub>L</sub>, d<sub>L</sub>（世代1成分）</td>
+      </tr>
+      <tr>
+        <td>u&supc;</td>
+        <td>右手上型クォーク</td>
+        <td>(3̄, 1, &minus;2/3)</td>
+        <td>3̄</td>
+        <td style="color:var(--accent)">3</td>
+        <td>u<sub>R</sub> の charge-conjugate</td>
+      </tr>
+      <tr>
+        <td>d&supc;</td>
+        <td>右手下型クォーク</td>
+        <td>(3̄, 1, +1/3)</td>
+        <td>3̄</td>
+        <td style="color:var(--accent)">3</td>
+        <td>d<sub>R</sub> の charge-conjugate</td>
+      </tr>
+      <tr>
+        <td>L</td>
+        <td>左手レプトン二重態</td>
+        <td>(1, 2, &minus;1/2)</td>
+        <td>1</td>
+        <td style="color:var(--accent)">2</td>
+        <td>&nu;<sub>L</sub>, e<sub>L</sub>（世代1成分）</td>
+      </tr>
+      <tr>
+        <td>e&supc;</td>
+        <td>右手荷電レプトン</td>
+        <td>(1, 1, +1)</td>
+        <td>1</td>
+        <td style="color:var(--accent)">1</td>
+        <td>e<sub>R</sub> の charge-conjugate</td>
+      </tr>
+      <tr>
+        <td>&nu;&supc;</td>
+        <td>右手中性微子</td>
+        <td>(1, 1, 0)</td>
+        <td>1</td>
+        <td style="color:var(--accent)">1</td>
+        <td>&nu;<sub>R</sub>（Majoranaの可能性）</td>
+      </tr>
+      <tr style="border-top:2px solid var(--accent)">
+        <td style="color:var(--accent)"><strong>合計</strong></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td style="color:var(--accent);font-size:var(--step-1)"><strong>16</strong></td>
+        <td style="color:var(--accent)">クォーク12 + レプトン4</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="grid-2" style="margin-top:calc(var(--space)*1.5)">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--cyan)"></span> クォーク：12</h3>
+      <div class="formula-block" style="font-size:var(--step-1);border-left-color:var(--cyan);">
+        Q(6) + u&supc;(3) + d&supc;(3) = 12
+      </div>
+      <p style="font-size:var(--step--1);color:var(--muted);margin-top:0.5rem;">
+        Q は弱二重態（2）× 色（3）= 6。u&supc; と d&supc; は各3色。16のうち<strong style="color:var(--ink)">3/4がクォーク</strong>。
+      </p>
+    </div>
+
+    <div class="card">
+      <h3><span class="dot" style="background:var(--magenta)"></span> レプトン：4</h3>
+      <div class="formula-block" style="font-size:var(--step-1);border-left-color:var(--magenta);">
+        L(2) + e&supc;(1) + &nu;&supc;(1) = 4
+      </div>
+      <p style="font-size:var(--step--1);color:var(--muted);margin-top:0.5rem;">
+        L は弱二重態（2）。e&supc; と &nu;&supc; は各1。16のうち<strong style="color:var(--ink)">1/4がレプトン</strong>。
+      </p>
+    </div>
+  </div>
+
+  <div class="correction-box">
+    <p><strong>注意：</strong>16 には反粒子（u&supc;, d&supc;, e&supc;, &nu;&supc;）が<strong>既に含まれている</strong>。したがって「1風味 = 手性 &times; スピン &times; 粒子/反粒子 = 8」という計数は二重計上である。無質量フェルミオンは手性とヘリシティは一致し、独立ではない。</p>
+  </div>
+</section>
+
+<!-- Section 4: 512/16 = 32 の正体 -->
+<section>
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <div>
+      <h2 class="section-title">512/16 = 32 の正体</h2>
+      <p class="section-desc">「内部自由度」ではなく、SO(10) ディラック・スピールの次元</p>
+    </div>
+  </div>
+
+  <div class="correction-box">
+    <p><strong>前回の誤り：</strong>「32 = 手性(2) &times; スピン(2) &times; 粒子/反粒子(2) &times; 色(4)」は二重計上を含む不正確な分解。32 の正体は SO(10) のディラック・スピノール次元そのもの。</p>
+  </div>
+
+  <div class="formula-block" style="font-size:var(--step-2); text-align:center;">
+    512 = 16 &times; 32
+    <div class="formula-caption" style="font-size:var(--step-0);">SO(18) Dirac = SO(10) Weyl &times; SO(10) Dirac</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--cyan)"></span> 数値の対応</h3>
+      <table style="font-size:0.75rem;">
+        <tr><th>対象</th><th>群</th><th>次元</th><th>意味</th></tr>
+        <tr><td>512</td><td>SO(18) Dirac</td><td>2&sup9;</td><td>9モードの全状態</td></tr>
+        <tr><td>256</td><td>SO(18) Weyl</td><td>2&sup8;</td><td>キラリティ分解後</td></tr>
+        <tr><td>32</td><td>SO(10) Dirac</td><td>2&sup5;</td><td>16 + 16</td></tr>
+        <tr><td>16</td><td>SO(10) Weyl</td><td>2&sup4;</td><td>1世代のフェルミオン</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3><span class="dot" style="background:var(--magenta)"></span> 512 = 16 &times; 32 の解釈</h3>
+      <p style="font-size:var(--step--1);color:var(--muted);">
+        512（SO(18) Dirac）が SO(10) Weyl（16）で割れることは、SO(18) が SO(10) を部分群として含むことの数値的表現である。32 は「内部自由度」ではなく、<strong style="color:var(--ink)">SO(10) ディラック・スピノール = 16 + 16̄</strong> の次元。
+      </p>
+      <div class="formula-block" style="font-size:var(--step-0);margin-top:0.8rem;">
+        32 = 16 + 16̄
+        <div class="formula-caption">粒子世代 + 鏡像世代</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <p><strong style="color:var(--accent)">結論：</strong>512/16 = 32 は「偶然の数値一致」ではなく、<strong style="color:var(--ink)">SO(18) &sup; SO(10) の群論的構造の必然的帰結</strong>。TTTの9モードが SO(18) スピノールを形成することで、標準模型の SO(10) 大統一構造が自然に創発する。</p>
+  </div>
+</section>
+
+<!-- Section 5: 496 の正体 -->
+<section>
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <div>
+      <h2 class="section-title">496 の正体</h2>
+      <p class="section-desc">SO(16) の次元ではなく、SO(32) と E₈ &times; E₈ の次元</p>
+    </div>
+  </div>
+
+  <div class="correction-box">
+    <p><strong>前回の誤り：</strong>「496 = SO(16) の次元（248&times;2）」は誤り。SO(16) の次元は 120。496 は SO(32) と E₈ &times; E₈ の次元。</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--red)"></span> 誤りの訂正</h3>
+      <table style="font-size:0.75rem;">
+        <tr><th>群</th><th>次元公式</th><th>値</th><th>正誤</th></tr>
+        <tr><td>SO(16)</td><td>16 &times; 15 / 2</td><td>120</td><td style="color:var(--red)">前回誤り</td></tr>
+        <tr><td>SO(32)</td><td>32 &times; 31 / 2</td><td style="color:var(--accent)">496</td><td style="color:var(--green)">正しい</td></tr>
+        <tr><td>E₈ &times; E₈</td><td>248 + 248</td><td style="color:var(--accent)">496</td><td style="color:var(--green)">正しい</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3><span class="dot" style="background:var(--accent)"></span> 496 = 512 &minus; 16 の評価</h3>
+      <p style="font-size:var(--step--1);color:var(--muted);">
+        512 = 16 &times; 32 より、512 &minus; 16 = 16 &times; 31 = 32 &times; 31 / 2 = dim SO(32)。これは<strong style="color:var(--ink)">恒等式</strong>であり、証拠としての重みはゼロ。「食われた自由度」としての解釈は根拠がない。
+      </p>
+      <div class="formula-block" style="font-size:var(--step-0);margin-top:0.8rem;">
+        512 &minus; 16 = 496 = dim SO(32)
+        <div class="formula-caption">恒等式 — 証拠としての重みゼロ</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 6: 標準模型の正しい自由度カウント -->
+<section>
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <div>
+      <h2 class="section-title">標準模型の正しい自由度カウント</h2>
+      <p class="section-desc">前回の「192 = 48 &times; 手性 &times; スピン &times; 色」は二重計上</p>
+    </div>
+  </div>
+
+  <div class="correction-box">
+    <p><strong>前回の誤り：</strong>「48」は既に色込み（16 &times; 3 世代）。「手性 &times; スピン &times; 色」をさらにかけると二重計上となる。</p>
+  </div>
+
+  <div class="card" style="overflow-x:auto;">
+    <table>
+      <tr>
+        <th>数え方</th>
+        <th>計算</th>
+        <th>値</th>
+        <th>備考</th>
+      </tr>
+      <tr>
+        <td>フェルミオン種類（3世代）</td>
+        <td>16 &times; 3</td>
+        <td style="color:var(--accent)">48</td>
+        <td>色込み・手性込み</td>
+      </tr>
+      <tr>
+        <td>Weylフェルミオン（3世代）</td>
+        <td>48 &times; 2（スピン上/下）</td>
+        <td style="color:var(--accent)">96</td>
+        <td>スピン自由度を追加</td>
+      </tr>
+      <tr>
+        <td>Diracフェルミオン（3世代）</td>
+        <td>48 &times; 2（スピン）&times; 2（粒子/反粒子）</td>
+        <td style="color:var(--accent)">192</td>
+        <td>反粒を追加</td>
+      </tr>
+      <tr style="border-top:2px solid var(--accent)">
+        <td style="color:var(--accent)"><strong>正しい分解</strong></td>
+        <td style="color:var(--accent)">192 = 48 &times; 2 &times; 2</td>
+        <td style="color:var(--accent)">192</td>
+        <td style="color:var(--accent)">48（種類）&times; スピン2 &times; 粒子/反粒子2</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="highlight-box">
+    <p><strong style="color:var(--accent)">注意：</strong>16（SO(10) Weyl）には既に手性と色が含まれている。Q(6) は色3 &times; 弱二重態2、u&supc;(3) と d&supc;(3) は各3色。したがって 48 = 16 &times; 3 は「色込み・手性込み」の種類数であり、さらに色や手性をかけると二重計上となる。</p>
+  </div>
+</section>
+
+<!-- Section 7: 質量ヒエラルキー -->
+<section>
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <div>
+      <h2 class="section-title">質量ヒエラルキー</h2>
+      <p class="section-desc">m &prop; &omega; という単単純な冪法則は成立しない — 定性的記述に留める</p>
+    </div>
+  </div>
+
+  <div class="correction-box">
+    <p><strong>前回の誤り：</strong>m &prop; &omega;（&omega; = 1, 2, 3）では荷電レプトンの質量比を説明できない。m &prop; &omega;&supp; と置くと &mu; は p &approx; 7.7、&tau; は p &approx; 7.4 が必要で、一本の冪では通らない。</p>
+  </div>
+
+  <div class="card" style="overflow-x:auto;">
+    <table>
+      <tr>
+        <th>世代</th>
+        <th>&omega;</th>
+        <th>粒子</th>
+        <th>質量 (MeV)</th>
+        <th>m/m<sub>e</sub></th>
+        <th>m &prop; &omega;&supp; での p</th>
+      </tr>
+      <tr>
+        <td>I</td>
+        <td>1</td>
+        <td>e</td>
+        <td>0.511</td>
+        <td>1</td>
+        <td>&mdash;</td>
+      </tr>
+      <tr>
+        <td>II</td>
+        <td>2</td>
+        <td>&mu;</td>
+        <td>105.7</td>
+        <td>&approx; 207</td>
+        <td style="color:var(--red)">log(207)/log(2) &approx; 7.7</td>
+      </tr>
+      <tr>
+        <td>III</td>
+        <td>3</td>
+        <td>&tau;</td>
+        <td>1776.8</td>
+        <td>&approx; 3477</td>
+        <td style="color:var(--red)">log(3477)/log(3) &approx; 7.4</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="grid-2" style="margin-top:calc(var(--space)*1.5)">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--cyan)"></span> なぜ冪法則が通らないか</h3>
+      <p style="font-size:var(--step--1);color:var(--muted);">
+        &mu; と &tau; の質量比に必要な冪指数が一致しない（7.7 vs 7.4）。これは一本の単純な冪法則 m &prop; &omega;&supp; では説明できないことを示す。質量ヒエラルキーには、Yukawa結合の構造的な違いや、更高次元の演算子が関与している可能性がある。
+      </p>
+    </div>
+
+    <div class="card">
+      <h3><span class="dot" style="background:var(--magenta)"></span> 定性的な記述</h3>
+      <p style="font-size:var(--step--1);color:var(--muted);">
+        現時点では「回転量子数 &omega; が大きい世代ほど質量が大きい」という<strong style="color:var(--ink)">定性的な相関</strong>を主張するに留める。定量的な質量比の導出には、TTT理論のさらなる発展が必要。
+      </p>
+      <div class="formula-block" style="font-size:var(--step-0);margin-top:0.8rem;">
+        m<sub>n</sub> &gt; m<sub>n&minus;1</sub> （定性的）
+        <div class="formula-caption">回転数が大きい世代ほど質量が大きい</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 8: 3世代の問題 -->
+<section>
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <div>
+      <h2 class="section-title">3世代の問題</h2>
+      <p class="section-desc">「2&sup2;&sup7; は3で割り切れない」という論法は成立しない</p>
+    </div>
+  </div>
+
+  <div class="correction-box">
+    <p><strong>前回の誤り：</strong>「2&sup2;&sup7; は3で割り切れないので3世代は湧出する」という論法は成立しない。すべての2の冪は3で割り切れない（2 &equiv; &minus;1 mod 3）ため、この主張は何も区別していない。</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--red)"></span> なぜ論法が破綻するか</h3>
+      <p style="font-size:var(--step--1);color:var(--muted);">
+        2 &equiv; &minus;1 (mod 3) より、2&supn; &equiv; (&minus;1)&supn; (mod 3)。したがって 2&supn; &equiv; 1（n偶数）または &minus;1（n奇数）(mod 3)。<strong style="color:var(--ink)">すべての2の冪は3の倍数ではない</strong>。「2&sup2;&sup7; は3で割り切れない」は2&sup2;&sup7; に特有の性質ではなく、2の冪全体の普遍的性質。
+      </p>
+      <div class="formula-block" style="font-size:var(--step-0);margin-top:0.8rem;">
+        2&supn; &notequiv; 0 (mod 3) &nbsp; for all n
+        <div class="formula-caption">すべての2の冪は3で割り切れない</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="dot" style="background:var(--green)"></span> 3世代の別の説明</h3>
+      <p style="font-size:var(--step--1);color:var(--muted);">
+        SO(18) &sup; SO(10) &times; SO(8) の分解 256 = (16, 8<sub>s</sub>) + (16̄, 8<sub>c</sub>) は、<strong style="color:var(--ink)">最大8世代</strong>（+ 鏡像8世代）の構造を示唆する。実際に観測される3世代は、8つの多重度のうち3つだけが「質量を獲得」し、残りが重くなった（または質量が極めて大きくなった）結果として創発する可能性がある。
+      </p>
+      <div class="formula-block" style="font-size:var(--step-0);margin-top:0.8rem;">
+        8<sub>s</sub> &rarr; 3世代（観測）+ 5（重い/未観測）
+        <div class="formula-caption">SO(8) のトライアリティから世代数が創発</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <p><strong style="color:var(--accent)">重要：</strong>図の ((2&sup3;)&sup3;)&sup3; = 2&sup2;&sup7; という形で、一番外側の指数に3を入れておきながら「出力として3世代が湧出する」と主張するのは矛盾している。3を入力しておきながら出力と呼ぶ形になっている。3世代の説明には別の原理（SO(8) のトライアリティなど）が必要。</p>
+  </div>
+</section>
+
+<!-- Section 9: 修正まとめ -->
+<section>
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <div>
+      <h2 class="section-title">修正まとめ</h2>
+      <p class="section-desc">前回からの主な訂正事項</p>
+    </div>
+  </div>
+
+  <div class="card" style="overflow-x:auto;">
+    <table>
+      <tr>
+        <th>項目</th>
+        <th>前回（誤り）</th>
+        <th>今回（修正）</th>
+      </tr>
+      <tr>
+        <td>496の正体</td>
+        <td style="color:var(--red)">SO(16) の次元（248&times;2）</td>
+        <td style="color:var(--green)">SO(32) と E₈&times;E₈ の次元。SO(16)=120</td>
+      </tr>
+      <tr>
+        <td>SO(10) の 16</td>
+        <td style="color:var(--red)">クォーク8 + レプトン8</td>
+        <td style="color:var(--green)">Q(6)+u&supc;(3)+d&supc;(3)+L(2)+e&supc;(1)+&nu;&supc;(1) = クォーク12+レプトン4</td>
+      </tr>
+      <tr>
+        <td>1風味=8</td>
+        <td style="color:var(--red)">手性&times;スピン&times;粒子/反粒子</td>
+        <td style="color:var(--green)">16には反粒子が既に含まれる。無質量なら手性とヘリシティは独立ではない</td>
+      </tr>
+      <tr>
+        <td>192の分解</td>
+        <td style="color:var(--red)">48 &times; 手性 &times; スピン &times; 色</td>
+        <td style="color:var(--green)">48 &times; 2（スピン）&times; 2（粒子/反粒子）。48は既に色込み</td>
+      </tr>
+      <tr>
+        <td>質量ヒエラルキー</td>
+        <td style="color:var(--red)">m &prop; &omega;（&omega;=1,2,3）</td>
+        <td style="color:var(--green)">冪指数が世代間で一致しない。定性的記述に留める</td>
+      </tr>
+      <tr>
+        <td>2&sup2;&sup7; と3世代</td>
+        <td style="color:var(--red)">「2&sup2;&sup7;は3で割り切れないので湧出」</td>
+        <td style="color:var(--green)">すべての2の冪は3で割り切れない。SO(8)トライアリティが別解</td>
+      </tr>
+      <tr>
+        <td>512/16=32</td>
+        <td style="color:var(--red)">「内部自由度」</td>
+        <td style="color:var(--green)">SO(10)ディラック・スピノール=16+16̄の次元</td>
+      </tr>
+      <tr>
+        <td>496=512&minus;16</td>
+        <td style="color:var(--red)">「食われた自由度」</td>
+        <td style="color:var(--green)">16&times;31=32&times;31/2=dim SO(32)。恒等式で証拠としての重みゼロ</td>
+      </tr>
+      <tr>
+        <td>核心洞察</td>
+        <td style="color:var(--red)">（記載なし）</td>
+        <td style="color:var(--green)">9モード &rarr; SO(18)スピノール512。SO(18)&sup;SO(10)&times;SO(8)</td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<!-- Section 10: 新しい洞察 -->
+<section>
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <div>
+      <h2 class="section-title">新しい洞察：SO(18) スピノールからの創発</h2>
+      <p class="section-desc">TTTの9モード構造が標準模型の大統一構造と自然に接続する</p>
+    </div>
+  </div>
+
+  <div class="formula-block" style="font-size:var(--step-2); text-align:center;">
+    9双極モード &rArr; SO(18) &sup; SO(10) &times; SO(8)
+    <div class="formula-caption" style="font-size:var(--step-0);">512 &rarr; 256 = (16, 8<sub>s</sub>) + (16̄, 8<sub>c</sub>)</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--cyan)"></span> TTT &rarr; SO(18) の対応</h3>
+      <p style="font-size:var(--step--1);color:var(--muted);">
+        TTTの9成分（X,Y,Z,U,V,W,R,I,J）がそれぞれ &plusmn; を持つことは、フェルミオン的生成・消滅演算子の Clifford 代数 Cl(18) の構造と同型。この代数が SO(18) のスピノール表現を生む。
+      </p>
+      <div class="formula-block" style="font-size:var(--step-0);margin-top:0.8rem;">
+        Cl(18) &rarr; SO(18) スピノール
+        <div class="formula-caption">Clifford代数からスピノールが創発</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="dot" style="background:var(--magenta)"></span> SO(8) トライアリティと世代</h3>
+      <p style="font-size:var(--step--1);color:var(--muted);">
+        SO(8) は3つの8次元表現（8<sub>v</sub>, 8<sub>s</sub>, 8<sub>c</sub>）を持つ「トライアリティ」という独特の対称性を持つ。8<sub>s</sub> と 8<sub>c</sub> がそれぞれ「通常世代」と「鏡像世代」の多重度として現れる。3世代は8のうち3つが質量を獲得した結果として創発する可能性がある。
+      </p>
+      <div class="formula-block" style="font-size:var(--step-0);margin-top:0.8rem;">
+        SO(8) トライアリティ: 8<sub>v</sub> &harr; 8<sub>s</sub> &harr; 8<sub>c</sub>
+        <div class="formula-caption">3つの8次元表現の対称的交換</div>
+      </div>
+    </div>
+  </div>
+
+  <blockquote style="margin-top:calc(var(--space)*1.5)">
+    「生きているのだから、滅ばないことをすればいい。」
+  </blockquote>
+</section>
+
+<footer style="text-align:center;padding:calc(var(--space)*3) var(--space);border-top:1px solid var(--line);margin-top:calc(var(--space)*2);">
+  <p style="font-family:Orbitron,monospace;font-size:var(--step--2);color:var(--muted);letter-spacing:0.15em;">
+    TRI-TETRA THEORY v3 &mdash; 修正版
+  </p>
+  <p style="font-size:var(--step--2);color:var(--muted);margin-top:0.5rem;">
+    川上真潔 (Kawakami Naoyuki) &mdash; ORCID: 0009-0009-2972-6511
+  </p>
+  <p style="font-size:var(--step--2);color:var(--red);margin-top:0.8rem;">
+    本資料は前回の誤りを訂正した修正版です。誤りの指摘に感謝します。
+  </p>
+</footer>
+
+</main>
+
+<script>
+if (window.matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('section, .card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+  });
+}
+</script>
+
+</body>
+</html>
